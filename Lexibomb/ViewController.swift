@@ -11,26 +11,33 @@ import UIKit
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     struct Point {
-        let x: Int
-        let y: Int
+        let x:Int
+        let y:Int
         
         func asString() -> String {
             return String("(\(x), \(y))")
         }
     }
     
-    var tiles: String[]
+    struct Tile {
+        var display:String
+        var data:String
+    }
+    
+    var tiles: Tile[]
     let columnCount: Int
     
     init(coder aDecoder: NSCoder!)  {
-        tiles = ["one", "two", "three", "four", "5", "6", "7"]
         
+        var rowCount:Int = 5
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            columnCount = 14
+            columnCount = 12
         } else {
             columnCount = 5
         }
         
+        var count = rowCount * columnCount
+        tiles = Array<Tile>(count: count, repeatedValue: Tile(display: "*", data: ""))
         super.init(coder: aDecoder)
     }
     
@@ -48,9 +55,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         
-        var label = cell.viewWithTag(1001) as UILabel
+        // Update the data value here for convenience
+        var tile = self.tiles[indexPath.row]
+        tile.data = String("\(indexPath.row)")
+        self.tiles[indexPath.row] = tile
         
-        label.text = self.tiles[indexPath.row]
+        var label = cell.viewWithTag(1001) as UILabel
+        label.text = tile.display
         
         return cell
     }
@@ -61,6 +72,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         NSLog("Pressed %@", pointForIndexPath(indexPath).asString())
+        
+        // Tile is a struct, aka value type, so it gets copied, we could change it to a class
+        // type so we can modify values in place very easily
+        var tile = tiles[indexPath.row]
+        tile.display = tile.data
+        tiles[indexPath.row] = tile
+        
+        
+        
+        self.collectionView.reloadData()
     }
     
     func pointForIndexPath(indexPath: NSIndexPath) -> Point {
