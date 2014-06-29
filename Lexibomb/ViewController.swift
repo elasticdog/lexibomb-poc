@@ -10,40 +10,49 @@ import UIKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    struct Point {
+    struct Point : Printable {
         let x:Int
         let y:Int
-        
+        var description:String {
+            get {
+                return String("(\(x), \(y))")
+            }
+        }
         func asString() -> String {
             return String("(\(x), \(y))")
         }
     }
     
-    struct Tile {
-        var display:String
-        var data:String
+    class Tile : Printable {
+        var display:String = "*"
+        var value:String?
+        var letter:String?
+        var description:String {
+            get {
+                return String("\(display) \(value)")
+            }
+        }
     }
     
-    var tiles: Tile[]
+    var tiles: Tile[] = Array<Tile>()
+    var rowCount:Int = 5
     let columnCount: Int
     
     init(coder aDecoder: NSCoder!)  {
         
-        var rowCount:Int = 5
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             columnCount = 12
         } else {
             columnCount = 5
         }
         
-        var count = rowCount * columnCount
-        tiles = Array<Tile>(count: count, repeatedValue: Tile(display: "*", data: ""))
         super.init(coder: aDecoder)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        placeBombs()
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,10 +64,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         
-        // Update the data value here for convenience
         var tile = self.tiles[indexPath.row]
-        tile.data = String("\(indexPath.row)")
-        self.tiles[indexPath.row] = tile
         
         var label = cell.viewWithTag(1001) as UILabel
         label.text = tile.display
@@ -71,15 +77,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
     
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        NSLog("Pressed %@", pointForIndexPath(indexPath).asString())
         
-        // Tile is a struct, aka value type, so it gets copied, we could change it to a class
-        // type so we can modify values in place very easily
         var tile = tiles[indexPath.row]
-        tile.display = tile.data
-        tiles[indexPath.row] = tile
         
-        
+        if let display = tile.value {
+            tile.display = display
+        }
+        else {
+            updateTile(indexPath)
+        }
         
         self.collectionView.reloadData()
     }
@@ -87,8 +93,55 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func pointForIndexPath(indexPath: NSIndexPath) -> Point {
         var row = indexPath.row / self.columnCount
         var column = indexPath.row % self.columnCount
-        return Point(x: row, y: column)
+        return Point(x: column, y: row)
     }
     
+    func tileAtPoint(point:Point) -> Tile {
+        return tiles[point.y * columnCount + point.x]
+    }
+    
+    func placeBombs() {
+        for index in 0..columnCount * rowCount {
+            
+            var tile = Tile()
+        
+            if rand() % 10 == 0 {
+                tile.value = "💣"
+            }
+
+            tiles.append(tile)
+        }
+        
+        println(tiles)
+    }
+    
+    func updateTile(indexPath:NSIndexPath) {
+        
+        var point = pointForIndexPath(indexPath)
+        var tile = tileAtPoint(point)
+       
+        var bombs = 0
+        for column in point.x - 1...point.x + 1 {
+            
+            if column > -1 && column < columnCount  {
+             
+                for row in point.y - 1...point.y + 1 {
+                    
+                    if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
+                
+                        var point = Point(x:column, y:row)
+                        var checkTile = tileAtPoint(point)
+                        
+                        if checkTile.value == "💣" {
+                            bombs++
+                        }
+                    }
+                }
+            }
+        }
+        
+        tile.value = String("\(bombs)")
+        tile.display = tile.value!
+    }
 }
 
