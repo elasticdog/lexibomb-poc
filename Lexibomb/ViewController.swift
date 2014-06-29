@@ -10,10 +10,26 @@ import UIKit
 
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    struct Point {
+        let x: Int
+        let y: Int
+        
+        func asString() -> String {
+            return String("(\(x), \(y))")
+        }
+    }
+    
     var tiles: String[]
+    let columnCount: Int
     
     init(coder aDecoder: NSCoder!)  {
         tiles = ["one", "two", "three", "four", "5", "6", "7"]
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            columnCount = 14
+        } else {
+            columnCount = 5
+        }
         
         super.init(coder: aDecoder)
     }
@@ -27,7 +43,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
@@ -44,7 +60,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
     
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        NSLog("Pressed %@", self.tiles[indexPath.row])
+        NSLog("Pressed %@", pointForIndexPath(indexPath).asString())
     }
+    
+    func pointForIndexPath(indexPath: NSIndexPath) -> Point {
+        var row = indexPath.row / self.columnCount
+        var column = indexPath.row % self.columnCount
+        return Point(x: row, y: column)
+    }
+    
 }
 
