@@ -35,15 +35,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
     
     var tiles: Tile[] = Array<Tile>()
-    var rowCount:Int = 5
-    let columnCount: Int
+    var rowCount:Int = 9
+    let columnCount: Int = 5
     
     init(coder aDecoder: NSCoder!)  {
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             columnCount = 12
-        } else {
-            columnCount = 5
+            rowCount = 17
         }
         
         super.init(coder: aDecoder)
@@ -105,7 +104,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             
             var tile = Tile()
         
-            if rand() % 10 == 0 {
+            if rand() % 7 == 0 {
                 tile.value = "💣"
             }
 
@@ -116,19 +115,21 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
     
     func updateTile(indexPath:NSIndexPath) {
-        
-        var point = pointForIndexPath(indexPath)
+        updateTileAt(pointForIndexPath(indexPath))
+    }
+    
+    func updateTileAt(point:Point) {
         var tile = tileAtPoint(point)
-       
+        
         var bombs = 0
         for column in point.x - 1...point.x + 1 {
             
             if column > -1 && column < columnCount  {
-             
+                
                 for row in point.y - 1...point.y + 1 {
                     
                     if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
-                
+                        
                         var point = Point(x:column, y:row)
                         var checkTile = tileAtPoint(point)
                         
@@ -142,6 +143,29 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         tile.value = String("\(bombs)")
         tile.display = tile.value!
+        
+        if bombs == 0 {
+            for column in point.x - 1...point.x + 1 {
+                
+                if column > -1 && column < columnCount  {
+                    
+                    for row in point.y - 1...point.y + 1 {
+                        
+                        if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
+                            var point = Point(x:column, y:row)
+                            var tile = tileAtPoint(point)
+                            
+                            if let value = tile.value {
+                                continue
+                            }
+                            else {
+                                updateTileAt(point)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

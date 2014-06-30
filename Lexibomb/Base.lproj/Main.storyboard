@@ -9,7 +9,7 @@
             <objects>
                 <collectionViewController id="WG3-aH-VcG" customClass="ViewController" customModule="Lexibomb" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" id="6nV-t8-5hG">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+                        <rect key="frame" x="0.0" y="64" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qPz-fJ-bWN">
@@ -43,6 +43,7 @@
                             <outlet property="delegate" destination="WG3-aH-VcG" id="EdW-Q5-k76"/>
                         </connections>
                     </collectionView>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yav-XT-XyO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
