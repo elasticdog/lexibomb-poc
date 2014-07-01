@@ -8,6 +8,8 @@
 
 import UIKit
 
+let daBomb = "💣"
+
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     struct Point : Printable {
@@ -34,24 +36,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
     
+    var letters = Array<String>()
     var tiles: Tile[] = Array<Tile>()
     var rowCount:Int = 9
     let columnCount: Int = 5
-    var letterControl: UICollectionReusableView? {
+    var letterBar: UISegmentedControl?
+    var footer: UICollectionReusableView? {
         didSet {
-            if let view = letterControl? {
-                var control = view.viewWithTag(1002) as UISegmentedControl
+            if let view = footer {
+                letterBar = view.viewWithTag(1002) as? UISegmentedControl
                 
-                var letters = Array<String>()
-                
-                for character in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
-                    letters.append(String(character))
-                }
-                
-                for segment in 0..control.numberOfSegments {
-                    var location = Int(arc4random() % UInt32(letters.count))
-                    var letter = letters[ location ]
-                    control.setTitle( letter, forSegmentAtIndex: segment)
+                if let control = letterBar {
+                    
+                    for character in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+                        letters.append(String(character))
+                    }
+                    
+                    for segment in 0..control.numberOfSegments {
+                        control.setTitle( randomLetter(), forSegmentAtIndex: segment)
+                    }
                 }
             }
         }
@@ -97,12 +100,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         
         var tile = tiles[indexPath.row]
+ 
+        if tile.display != "*" {
+            return
+        }
         
-        if let display = tile.value {
-            tile.display = display
+        if !tile.value {
+            updateTile(indexPath)
+        }
+        
+        if tile.value == daBomb {
+            tile.display = tile.value!
         }
         else {
-            updateTile(indexPath)
+            var index = letterBar!.selectedSegmentIndex
+            tile.display = letterBar!.titleForSegmentAtIndex(index)
+            letterBar!.setTitle(randomLetter(), forSegmentAtIndex: index)
         }
         
         self.collectionView.reloadData()
@@ -112,14 +125,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var result:UICollectionReusableView? = nil;
         if kind == UICollectionElementKindSectionFooter {
             
-            if !self.letterControl {
-                self.letterControl = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
+            if !self.footer {
+                self.footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
             }
             
-            result = self.letterControl
+            result = self.footer
         }
         
         return result
+    }
+    
+    func randomLetter() -> String {
+        var location = Int(arc4random() % UInt32(letters.count))
+        return letters[ location ]
     }
     
     func pointForIndexPath(indexPath: NSIndexPath) -> Point {
@@ -138,7 +156,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             var tile = Tile()
         
             if arc4random() % 7 == 0 {
-                tile.value = "💣"
+                tile.value = daBomb
             }
 
             tiles.append(tile)
@@ -166,7 +184,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                         var point = Point(x:column, y:row)
                         var checkTile = tileAtPoint(point)
                         
-                        if checkTile.value == "💣" {
+                        if checkTile.value == daBomb {
                             bombs++
                         }
                     }
