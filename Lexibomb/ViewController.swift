@@ -210,8 +210,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if column > -1 && column < columnCount  {
                 for row in point.y - 1...point.y + 1 {
                     if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
-                        var tile = tileAtPoint(Point(x:column, y:row))
-                        aroundTiles += tile;
+                        aroundTiles += tileAtPoint(Point(x:column, y:row))
                     }
                 }
             }
