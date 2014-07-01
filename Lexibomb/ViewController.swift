@@ -25,7 +25,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     class Tile : Printable {
         var uid:Int?
-        var display:String = "*"
+        var display:String = ""
         var value:String?
         var letter:String?
         var description:String {
@@ -236,7 +236,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var tile = tileAtPoint(point)
         tile.value = String("\(bombs)")
-        tile.display = tile.value!
+        tile.display = "\(tile.value!)\t"
         
         if bombs == 0 {
             for checkTile in surroundingTiles {
