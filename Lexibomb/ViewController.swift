@@ -114,16 +114,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             updateTile(indexPath)
         }
         
-        if tile.value == daBomb {
-            tile.display = tile.value!
-        }
-        else {
-            tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
-            tile.display = String("\(tile.letter!)/\(tile.value)")
-            letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
-            letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
-            letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
-        }
+        tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
+        tile.display = String("\(tile.letter!) \(tile.value)")
+        letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
+        letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
+        letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
         
         self.collectionView.reloadData()
     }
