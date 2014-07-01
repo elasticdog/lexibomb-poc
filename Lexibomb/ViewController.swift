@@ -115,7 +115,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
         
         tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
-        tile.display = String("\(tile.value!) \(tile.letter)")
+        tile.display = String("\(tile.value) \(tile.letter!)")
         letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
         letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
         letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
