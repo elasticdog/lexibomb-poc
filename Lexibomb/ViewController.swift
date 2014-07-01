@@ -52,7 +52,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     }
                     
                     for segment in 0..control.numberOfSegments {
-                        control.setTitle( randomLetter(), forSegmentAtIndex: segment )
+                        control.setTitle( takeLetter(), forSegmentAtIndex: segment )
                     }
                     
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
@@ -142,16 +142,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var bar = letterBar!
         for segment in 0..letterBar!.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
-                bar.setTitle( randomLetter(), forSegmentAtIndex: segment )
+                bar.setTitle( takeLetter(), forSegmentAtIndex: segment )
                 bar.setEnabled(true, forSegmentAtIndex: segment)
             }
         }
 
     }
     
-    func randomLetter() -> String {
+    func takeLetter() -> String {
         var location = Int(arc4random_uniform(UInt32(letters.count)))
-        return letters[ location ]
+        var letter = letters[location]
+        letters.removeAtIndex(location)
+        return letter
     }
     
     func pointForTile(tile:Tile) -> Point? {
