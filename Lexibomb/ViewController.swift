@@ -150,7 +150,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
     
     func randomLetter() -> String {
-        var location = Int(arc4random() % UInt32(letters.count))
+        var location = Int(arc4random_uniform(UInt32(letters.count)))
         return letters[ location ]
     }
     
@@ -189,7 +189,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         for index in 0..columnCount * rowCount {
             
             var tile = Tile()
-            if arc4random() % 7 == 0 {
+            if arc4random_uniform(7) == 0 {
                 tile.value = daBomb
             }
 
