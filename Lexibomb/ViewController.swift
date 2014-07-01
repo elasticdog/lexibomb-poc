@@ -47,7 +47,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 
                 if let control = letterBar {
                     
-                    for character in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+                    for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ" {
                         letters.append( String(character) )
                     }
                     
