@@ -8,14 +8,14 @@
         <scene sceneID="fbh-7f-VR9">
             <objects>
                 <collectionViewController id="WG3-aH-VcG" customClass="ViewController" customModule="Lexibomb" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" id="6nV-t8-5hG">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="6nV-t8-5hG">
                         <rect key="frame" x="0.0" y="64" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="qPz-fJ-bWN">
                             <size key="itemSize" width="50" height="50"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="44"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -38,6 +38,32 @@
                                 <color key="backgroundColor" red="0.34497334197183521" green="0.4494977678571429" blue="0.3557522397491385" alpha="1" colorSpace="calibratedRGB"/>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LetterBar" id="Ugo-sU-jtH">
+                            <rect key="frame" x="0.0" y="50" width="480" height="1"/>
+                            <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <segmentedControl opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP">
+                                    <rect key="frame" x="20" y="6" width="440" height="29"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <segments>
+                                        <segment title="First"/>
+                                        <segment title="Second"/>
+                                        <segment title="Third"/>
+                                        <segment title="Fourth"/>
+                                        <segment title="Fifth"/>
+                                        <segment title="Sixth"/>
+                                        <segment title="Seventh"/>
+                                    </segments>
+                                    <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                </segmentedControl>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="t4b-f3-ovP" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="20" id="Nbz-kv-kG5"/>
+                                <constraint firstAttribute="centerX" secondItem="t4b-f3-ovP" secondAttribute="centerX" id="YLH-lH-9S2"/>
+                                <constraint firstAttribute="centerY" secondItem="t4b-f3-ovP" secondAttribute="centerY" constant="2" id="qu5-dE-9hb"/>
+                                <constraint firstAttribute="trailing" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="20" id="rdv-TO-QZP"/>
+                            </constraints>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="WG3-aH-VcG" id="5Ge-GM-bsK"/>
                             <outlet property="delegate" destination="WG3-aH-VcG" id="EdW-Q5-k76"/>

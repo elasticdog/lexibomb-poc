@@ -37,6 +37,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var tiles: Tile[] = Array<Tile>()
     var rowCount:Int = 9
     let columnCount: Int = 5
+    var letterControl: UICollectionReusableView? {
+        didSet {
+            if let view = letterControl? {
+                var control = view.viewWithTag(1002) as UISegmentedControl
+                
+                var letters = Array<String>()
+                
+                for character in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
+                    letters.append(String(character))
+                }
+                
+                for segment in 0..control.numberOfSegments {
+                    var location = Int(arc4random() % UInt32(letters.count))
+                    var letter = letters[ location ]
+                    control.setTitle( letter, forSegmentAtIndex: segment)
+                }
+            }
+        }
+    }
     
     init(coder aDecoder: NSCoder!)  {
         
@@ -88,6 +107,20 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         self.collectionView.reloadData()
     }
+
+    override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
+        var result:UICollectionReusableView? = nil;
+        if kind == UICollectionElementKindSectionFooter {
+            
+            if !self.letterControl? {
+                self.letterControl = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
+            }
+            
+            result = self.letterControl
+        }
+        
+        return result
+    }
     
     func pointForIndexPath(indexPath: NSIndexPath) -> Point {
         var row = indexPath.row / self.columnCount
@@ -104,7 +137,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             
             var tile = Tile()
         
-            if rand() % 7 == 0 {
+            if arc4random() % 7 == 0 {
                 tile.value = "💣"
             }
 
