@@ -183,16 +183,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         updateTileAt(pointForIndexPath(indexPath))
     }
     
-    func tilesAroundPoint(point:Point, discardKnown:Bool) -> Array<Tile> {
+    func tilesAroundPoint(point:Point) -> Array<Tile> {
         var aroundTiles = Array<Tile>()
         for column in point.x - 1...point.x + 1 {
             if column > -1 && column < columnCount  {
                 for row in point.y - 1...point.y + 1 {
                     if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
                         var tile = tileAtPoint(Point(x:column, y:row))
-                        if discardKnown && tile.value {
-                            continue
-                        }
                         aroundTiles += tile;
                     }
                 }
@@ -206,7 +203,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var bombs = 0
         
-        for checkTile in tilesAroundPoint(point, discardKnown:false) {
+        var surroundingTiles = tilesAroundPoint(point)
+        for checkTile in surroundingTiles {
             if checkTile.value == daBomb {
                 bombs++
             }
@@ -217,7 +215,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         tile.display = tile.value!
         
         if bombs == 0 {
-            for checkTile in tilesAroundPoint(point, discardKnown:true) {
+            for checkTile in surroundingTiles {
+                if checkTile.value {
+                    continue
+                }
                 if let outerPoint = pointForTile(checkTile) {
                     updateTileAt(outerPoint)
                 }
