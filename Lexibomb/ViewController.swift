@@ -54,6 +54,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     for segment in 0..control.numberOfSegments {
                         control.setTitle( randomLetter(), forSegmentAtIndex: segment )
                     }
+                    
+                    control.selectedSegmentIndex = UISegmentedControlNoSegment
+                }
+                
+                if let button = view.viewWithTag(1003) as? UIButton {
+                    button.addTarget(self, action:"donePressed", forControlEvents:.TouchUpInside)
                 }
             }
         }
@@ -93,6 +99,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         
+        var selectedSegmentIndex = letterBar!.selectedSegmentIndex
+        if selectedSegmentIndex < 0 {
+            return
+        }
+        
         var tile = tiles[indexPath.row]
  
         if tile.letter {
@@ -107,10 +118,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             tile.display = tile.value!
         }
         else {
-            var index = letterBar!.selectedSegmentIndex
-            tile.letter = letterBar!.titleForSegmentAtIndex(index)
+            tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
             tile.display = String("\(tile.letter!)/\(tile.value)")
-            letterBar!.setTitle(randomLetter(), forSegmentAtIndex: index)
+            letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
+            letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
+            letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
         }
         
         self.collectionView.reloadData()
@@ -128,6 +140,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
         
         return result
+    }
+    
+    func donePressed() {
+        
+        var bar = letterBar!
+        for segment in 0..letterBar!.numberOfSegments {
+            if bar.titleForSegmentAtIndex(segment) == "" {
+                bar.setTitle( randomLetter(), forSegmentAtIndex: segment )
+                bar.setEnabled(true, forSegmentAtIndex: segment)
+            }
+        }
+
     }
     
     func randomLetter() -> String {
