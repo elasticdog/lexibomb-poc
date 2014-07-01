@@ -25,7 +25,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     class Tile : Printable {
         var uid:Int?
-        var display:String = "*"
+        var display:String = ""
         var value:String?
         var letter:String?
         var description:String {
@@ -103,15 +103,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             updateTile(indexPath)
         }
         
-        if tile.value == daBomb {
-            tile.display = tile.value!
-        }
-        else {
-            var index = letterBar!.selectedSegmentIndex
-            tile.letter = letterBar!.titleForSegmentAtIndex(index)
-            tile.display = String("\(tile.letter!)/\(tile.value)")
-            letterBar!.setTitle(randomLetter(), forSegmentAtIndex: index)
-        }
+        var index = letterBar!.selectedSegmentIndex
+        tile.letter = letterBar!.titleForSegmentAtIndex(index)
+        tile.display = String("\(tile.value) \(tile.letter!)")
+        letterBar!.setTitle(randomLetter(), forSegmentAtIndex: index)
         
         self.collectionView.reloadData()
     }
@@ -212,7 +207,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var tile = tileAtPoint(point)
         tile.value = String("\(bombs)")
-        tile.display = tile.value!
+        tile.display = "\(tile.value!)\t"
         
         if bombs == 0 {
             for checkTile in surroundingTiles {

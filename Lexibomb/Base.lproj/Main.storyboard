@@ -39,7 +39,7 @@
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LetterBar" id="Ugo-sU-jtH">
-                            <rect key="frame" x="0.0" y="50" width="480" height="1"/>
+                            <rect key="frame" x="0.0" y="50" width="480" height="44"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
                                 <segmentedControl opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP">
