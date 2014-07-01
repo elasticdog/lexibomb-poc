@@ -22,13 +22,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
     
+
     class Tile : Printable {
+        var uid:Int?
         var display:String = "*"
         var value:String?
         var letter:String?
         var description:String {
             get {
-                return String("\(display) \(value)")
+                return String("\(display) \(value) \(uid)")
             }
         }
     }
@@ -133,10 +135,31 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return letters[ location ]
     }
     
-    func pointForIndexPath(indexPath: NSIndexPath) -> Point {
-        var row = indexPath.row / self.columnCount
-        var column = indexPath.row % self.columnCount
+    func pointForTile(tile:Tile) -> Point? {
+        
+        var index = 0
+        for checkTile in tiles {
+            if let uid = checkTile.uid {
+                if let tuid = tile.uid {
+                    if uid == tuid {
+                        return pointForIndex(index)
+                    }
+                }
+            }
+            index++
+        }
+        
+        return nil
+    }
+    
+    func pointForIndex(index: Int) -> Point {
+        var row = index / self.columnCount
+        var column = index % self.columnCount
         return Point(x: column, y: row)
+    }
+    
+    func pointForIndexPath(indexPath: NSIndexPath) -> Point {
+        return pointForIndex(indexPath.row)
     }
     
     func tileAtPoint(point:Point) -> Tile {
@@ -151,55 +174,52 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 tile.value = daBomb
             }
 
+            tile.uid = index
             tiles.append( tile )
         }
-        
-        println(tiles)
     }
     
     func updateTile(indexPath:NSIndexPath) {
         updateTileAt(pointForIndexPath(indexPath))
     }
     
-    func updateTileAt(point:Point) {
-        var tile = tileAtPoint(point)
-        
-        var bombs = 0
+    func tilesAroundPoint(point:Point, discardKnown:Bool) -> Array<Tile> {
+        var aroundTiles = Array<Tile>()
         for column in point.x - 1...point.x + 1 {
             if column > -1 && column < columnCount  {
                 for row in point.y - 1...point.y + 1 {
                     if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
-                        
-                        var point = Point(x:column, y:row)
-                        var checkTile = tileAtPoint(point)
-                        
-                        if checkTile.value == daBomb {
-                            bombs++
+                        var tile = tileAtPoint(Point(x:column, y:row))
+                        if discardKnown && tile.value {
+                            continue
                         }
+                        aroundTiles += tile;
                     }
                 }
             }
         }
         
+        return aroundTiles
+    }
+    
+    func updateTileAt(point:Point) {
+        
+        var bombs = 0
+        
+        for checkTile in tilesAroundPoint(point, discardKnown:false) {
+            if checkTile.value == daBomb {
+                bombs++
+            }
+        }
+
+        var tile = tileAtPoint(point)
         tile.value = String("\(bombs)")
         tile.display = tile.value!
         
         if bombs == 0 {
-            for column in point.x - 1...point.x + 1 {
-                if column > -1 && column < columnCount  {
-                    for row in point.y - 1...point.y + 1 {
-                        if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
-                            var point = Point(x:column, y:row)
-                            var tile = tileAtPoint(point)
-                            
-                            if let value = tile.value {
-                                continue
-                            }
-                            else {
-                                updateTileAt(point)
-                            }
-                        }
-                    }
+            for checkTile in tilesAroundPoint(point, discardKnown:true) {
+                if let outerPoint = pointForTile(checkTile) {
+                    updateTileAt(outerPoint)
                 }
             }
         }
