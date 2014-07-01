@@ -124,7 +124,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
-        var result:UICollectionReusableView? = nil;
+        var result:UICollectionReusableView? = nil
         if kind == UICollectionElementKindSectionFooter {
             
             if !self.footer {
