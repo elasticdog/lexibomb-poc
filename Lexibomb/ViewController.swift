@@ -20,9 +20,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 return String("(\(x), \(y))")
             }
         }
-        func asString() -> String {
-            return String("(\(x), \(y))")
-        }
     }
     
     class Tile : Printable {
@@ -49,11 +46,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 if let control = letterBar {
                     
                     for character in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" {
-                        letters.append(String(character))
+                        letters.append( String(character) )
                     }
                     
                     for segment in 0..control.numberOfSegments {
-                        control.setTitle( randomLetter(), forSegmentAtIndex: segment)
+                        control.setTitle( randomLetter(), forSegmentAtIndex: segment )
                     }
                 }
             }
@@ -74,11 +71,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         
         placeBombs()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
@@ -155,12 +147,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         for index in 0..columnCount * rowCount {
             
             var tile = Tile()
-        
             if arc4random() % 7 == 0 {
                 tile.value = daBomb
             }
 
-            tiles.append(tile)
+            tiles.append( tile )
         }
         
         println(tiles)
@@ -175,11 +166,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var bombs = 0
         for column in point.x - 1...point.x + 1 {
-            
             if column > -1 && column < columnCount  {
-                
                 for row in point.y - 1...point.y + 1 {
-                    
                     if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
                         
                         var point = Point(x:column, y:row)
@@ -198,11 +186,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         if bombs == 0 {
             for column in point.x - 1...point.x + 1 {
-                
                 if column > -1 && column < columnCount  {
-                    
                     for row in point.y - 1...point.y + 1 {
-                        
                         if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
                             var point = Point(x:column, y:row)
                             var tile = tileAtPoint(point)
