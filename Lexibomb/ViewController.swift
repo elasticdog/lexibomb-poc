@@ -101,7 +101,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var tile = tiles[indexPath.row]
  
-        if tile.display != "*" {
+        if tile.letter {
             return
         }
         
@@ -114,7 +114,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
         else {
             var index = letterBar!.selectedSegmentIndex
-            tile.display = letterBar!.titleForSegmentAtIndex(index)
+            tile.letter = letterBar!.titleForSegmentAtIndex(index)
+            tile.display = String("\(tile.letter!)/\(tile.value)")
             letterBar!.setTitle(randomLetter(), forSegmentAtIndex: index)
         }
         
