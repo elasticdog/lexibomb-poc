@@ -112,7 +112,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var result:UICollectionReusableView? = nil;
         if kind == UICollectionElementKindSectionFooter {
             
-            if !self.letterControl? {
+            if !self.letterControl {
                 self.letterControl = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
             }
             
