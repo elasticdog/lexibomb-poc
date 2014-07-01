@@ -140,7 +140,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func donePressed() {
         
         var bar = letterBar!
-        for segment in 0..letterBar!.numberOfSegments {
+        for segment in 0..bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
                 bar.setTitle( takeLetter(), forSegmentAtIndex: segment )
                 bar.setEnabled(true, forSegmentAtIndex: segment)
