@@ -87,21 +87,29 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.borderWidth = 2
         cell.layer.cornerRadius = 8
-        cell.backgroundColor = UIColor.clearColor()
         
         var tile = self.tiles[indexPath.row]
 
-        
         if let value = tile.value?.toInt()? {
             if tile.display != "" {
-//                cell.backgroundColor = colors[value]
                 cell.layer.borderColor = colors[value].CGColor
             }
+        } else {
+            if tile.display != "" {
+                cell.layer.borderColor = colors[0].CGColor
+            } else {
+                cell.layer.borderColor = defaultColor.CGColor
+            }
         }
-        else {
-            cell.layer.borderColor = defaultColor.CGColor
-//            cell.backgroundColor = defaultColor
+
+        if tile.letter? {
+            if tile.display != "" {
+                cell.backgroundColor = colors[0]
+            }
+        } else {
+            cell.backgroundColor = defaultColor
         }
+
 
         var label = cell.viewWithTag(1001) as UILabel
         label.text = tile.display
