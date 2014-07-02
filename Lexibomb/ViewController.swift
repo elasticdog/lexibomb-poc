@@ -87,10 +87,17 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.borderWidth = 2
         cell.layer.cornerRadius = 8
+        cell.layer.borderColor = defaultColor.CGColor
+        cell.backgroundColor = defaultColor
         
         var tile = self.tiles[indexPath.row]
+        var background = cell.viewWithTag(1005) as UIImageView
+        background.image = nil
 
         if let value = tile.value?.toInt()? {
+            let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
+            background.image = UIImage(named:names[value])
+            cell.backgroundColor = UIColor.whiteColor()
             if tile.display != "" {
                 cell.layer.borderColor = colors[value].CGColor
             }
@@ -104,13 +111,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         if tile.letter? {
             if tile.display != "" {
-                cell.backgroundColor = colors[0]
+                cell.backgroundColor = UIColor.whiteColor() //colors[0]
             }
-        } else {
-            cell.backgroundColor = defaultColor
         }
 
-
+        if tile.value == daBomb && tile.letter {
+            cell.backgroundColor = UIColor.redColor()
+        }
+        
         var label = cell.viewWithTag(1001) as UILabel
         label.text = tile.display
         
@@ -125,6 +133,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var selectedSegmentIndex = letterBar!.selectedSegmentIndex
         if selectedSegmentIndex < 0 {
+            println("Tile: \(tiles[indexPath.row])")
             return
         }
         
@@ -139,7 +148,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
         
         tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
-        tile.display = String("\(tile.value) \(tile.letter!)")
+//        tile.display = String("\(tile.value) \(tile.letter!)")
+        tile.display = String("\(tile.letter!)")
         letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
         letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
         letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
@@ -256,7 +266,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var tile = tileAtPoint(point)
         tile.value = String("\(bombs)")
-        tile.display = "\(tile.value!)\t"
+//        tile.display = "\(tile.value!)\t"
         
         if bombs == 0 {
             for checkTile in surroundingTiles {
