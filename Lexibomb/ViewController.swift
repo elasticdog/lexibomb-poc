@@ -35,7 +35,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
-    let colors = [ UIColor.grayColor(), UIColor.blueColor(), UIColor.brownColor(), UIColor.magentaColor(), UIColor.orangeColor(), UIColor.redColor() ]
+    let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
+    let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     var letters = Array<String>()
     var tiles: Tile[] = Array<Tile>()
     var rowCount:Int = 9
@@ -96,20 +97,20 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var tile = self.tiles[indexPath.row]
         var background = cell.viewWithTag(1005) as UIImageView
         background.image = nil
-        background.transform = CGAffineTransformMakeScale(1.5, 1.5)
+        background.alpha = 0.7
+        background.transform = CGAffineTransformMakeScale(1.0, 1.0)
 
         if let value = tile.value?.toInt()? {
-            cell.backgroundColor = UIColor.grayColor()
+            cell.backgroundColor = UIColor.whiteColor()
             
             if value > 0 {
-                let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
                 background.image = UIImage(named:names[value])
             }
         }
 
         if tile.letter? {
             if tile.display != "" {
-                cell.backgroundColor = UIColor.grayColor()
+                cell.backgroundColor = letterTileColor
             }
         }
 
@@ -263,7 +264,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var tile = tileAtPoint(point)
         tile.value = String("\(bombs)")
-//        tile.display = "\(tile.value!)\t"
         
         if bombs == 0 {
             for checkTile in surroundingTiles {

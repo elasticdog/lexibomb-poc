@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WG3-aH-VcG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WG3-aH-VcG">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
     </dependencies>
@@ -8,7 +8,7 @@
         <scene sceneID="fbh-7f-VR9">
             <objects>
                 <collectionViewController id="WG3-aH-VcG" customClass="ViewController" customModule="Lexibomb" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="6nV-t8-5hG">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" id="6nV-t8-5hG" userLabel="Board">
                         <rect key="frame" x="0.0" y="64" width="480" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
@@ -19,18 +19,18 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="2dG-yM-J2F">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="2dG-yM-J2F" userLabel="Cell">
                                 <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.49999999999999961" tag="1005" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjx-i2-Bpv" userLabel="Image">
+                                        <imageView opaque="NO" userInteractionEnabled="NO" tag="1005" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vjx-i2-Bpv" userLabel="Image">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdS-rL-3KM" userLabel="Label">
-                                            <rect key="frame" x="4" y="14" width="42" height="20.5"/>
+                                        <label opaque="NO" clipsSubviews="YES" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="_" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdS-rL-3KM" userLabel="Label">
+                                            <rect key="frame" x="18.5" y="0.0" width="13" height="50"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -40,8 +40,20 @@
                                 </view>
                                 <color key="backgroundColor" red="0.34497334197183521" green="0.4494977678571429" blue="0.3557522397491385" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="bottom" secondItem="vdS-rL-3KM" secondAttribute="bottom" id="4C4-qW-oBA"/>
                                     <constraint firstAttribute="centerX" secondItem="vjx-i2-Bpv" secondAttribute="centerX" constant="0.5" id="5BM-fw-8wp"/>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="leading" secondItem="2dG-yM-J2F" secondAttribute="leading" id="5x6-H2-p3k"/>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="2dG-yM-J2F" secondAttribute="top" id="B9I-mv-TTO"/>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="vdS-rL-3KM" secondAttribute="top" id="Qz1-yn-rYa"/>
+                                    <constraint firstAttribute="bottom" secondItem="vjx-i2-Bpv" secondAttribute="bottom" id="SMm-fE-AIB"/>
+                                    <constraint firstAttribute="trailing" secondItem="vjx-i2-Bpv" secondAttribute="trailing" id="Sf1-XO-EqR"/>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="centerX" secondItem="vdS-rL-3KM" secondAttribute="centerX" id="WJ6-jt-fcU"/>
                                     <constraint firstAttribute="centerY" secondItem="vjx-i2-Bpv" secondAttribute="centerY" constant="-0.5" id="XDX-0C-2Tf"/>
+                                    <constraint firstAttribute="centerY" secondItem="vjx-i2-Bpv" secondAttribute="centerY" id="ZXd-da-lRU"/>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="leading" secondItem="2dG-yM-J2F" secondAttribute="leading" id="ZpL-zt-wqX"/>
+                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="2dG-yM-J2F" secondAttribute="top" id="b4l-9c-fSE"/>
+                                    <constraint firstAttribute="centerX" secondItem="vdS-rL-3KM" secondAttribute="centerX" id="lh8-95-Bci"/>
+                                    <constraint firstAttribute="centerX" secondItem="vjx-i2-Bpv" secondAttribute="centerX" id="zGc-jl-E43"/>
                                 </constraints>
                             </collectionViewCell>
                         </cells>
