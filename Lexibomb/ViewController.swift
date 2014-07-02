@@ -70,7 +70,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             columnCount = 12
-            rowCount = 17
+            rowCount = 12
         }
         
         super.init(coder: aDecoder)
