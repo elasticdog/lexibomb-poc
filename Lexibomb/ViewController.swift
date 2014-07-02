@@ -90,7 +90,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
-        cell.layer.borderWidth = 2
         cell.layer.cornerRadius = 8
         cell.backgroundColor = defaultColor
         
@@ -98,7 +97,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var background = cell.viewWithTag(1005) as UIImageView
         background.image = nil
         background.alpha = 0.7
-        background.transform = CGAffineTransformMakeScale(1.0, 1.0)
+        background.transform = CGAffineTransformMakeScale(1.2, 1.2)
 
         if let value = tile.value?.toInt()? {
             cell.backgroundColor = UIColor.whiteColor()
