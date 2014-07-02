@@ -35,7 +35,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
-    let colors = [ UIColor.grayColor(), UIColor.blueColor(), UIColor.greenColor(), UIColor.yellowColor(), UIColor.orangeColor(), UIColor.redColor() ]
+    let colors = [ UIColor.grayColor(), UIColor.blueColor(), UIColor.brownColor(), UIColor.magentaColor(), UIColor.orangeColor(), UIColor.redColor() ]
     var letters = Array<String>()
     var tiles: Tile[] = Array<Tile>()
     var rowCount:Int = 9
