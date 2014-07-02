@@ -82,6 +82,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         placeBombs()
     }
     
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+    
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell

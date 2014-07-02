@@ -26,7 +26,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.49999999999999961" tag="1005" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vjx-i2-Bpv" userLabel="Image">
+                                        <imageView opaque="NO" userInteractionEnabled="NO" alpha="0.49999999999999961" tag="1005" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vjx-i2-Bpv" userLabel="Image">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         </imageView>
                                         <label opaque="NO" clipsSubviews="YES" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdS-rL-3KM" userLabel="Label">
@@ -39,12 +39,8 @@
                                 </view>
                                 <color key="backgroundColor" red="0.34497334197183521" green="0.4494977678571429" blue="0.3557522397491385" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="2dG-yM-J2F" secondAttribute="top" id="0ZU-RK-vmo"/>
                                     <constraint firstAttribute="centerX" secondItem="vjx-i2-Bpv" secondAttribute="centerX" constant="0.5" id="5BM-fw-8wp"/>
-                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="leading" secondItem="2dG-yM-J2F" secondAttribute="leading" id="7zR-Uf-jFI"/>
-                                    <constraint firstAttribute="trailing" secondItem="vjx-i2-Bpv" secondAttribute="trailing" id="J9U-xk-6Xc"/>
                                     <constraint firstAttribute="centerY" secondItem="vjx-i2-Bpv" secondAttribute="centerY" constant="-0.5" id="XDX-0C-2Tf"/>
-                                    <constraint firstAttribute="bottom" secondItem="vjx-i2-Bpv" secondAttribute="bottom" id="ndG-Sh-aJx"/>
                                 </constraints>
                             </collectionViewCell>
                         </cells>
