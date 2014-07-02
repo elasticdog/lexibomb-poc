@@ -93,11 +93,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var tile = self.tiles[indexPath.row]
         var background = cell.viewWithTag(1005) as UIImageView
         background.image = nil
+        background.transform = CGAffineTransformMakeScale(1.5, 1.5)
 
         if let value = tile.value?.toInt()? {
-            let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
-            background.image = UIImage(named:names[value])
             cell.backgroundColor = UIColor.whiteColor()
+            
+            if value > 0 {
+                let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
+                background.image = UIImage(named:names[value])
+            }
+            
             if tile.display != "" {
                 cell.layer.borderColor = colors[value].CGColor
             }
