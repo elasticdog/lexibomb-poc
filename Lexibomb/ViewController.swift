@@ -85,16 +85,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
         
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        cell.layer.borderWidth = 2
+        cell.layer.cornerRadius = 8
+        cell.backgroundColor = UIColor.clearColor()
         
         var tile = self.tiles[indexPath.row]
 
+        
         if let value = tile.value?.toInt()? {
             if tile.display != "" {
-                cell.backgroundColor = colors[value]
+//                cell.backgroundColor = colors[value]
+                cell.layer.borderColor = colors[value].CGColor
             }
         }
         else {
-            cell.backgroundColor = defaultColor
+            cell.layer.borderColor = defaultColor.CGColor
+//            cell.backgroundColor = defaultColor
         }
 
         var label = cell.viewWithTag(1001) as UILabel
