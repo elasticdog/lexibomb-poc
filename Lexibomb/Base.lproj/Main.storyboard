@@ -54,7 +54,7 @@
                                         <segment title="Sixth"/>
                                         <segment title="Seventh"/>
                                     </segments>
-                                    <color key="tintColor" name="alternateSelectedControlColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="tintColor" red="0.28450045620437958" green="0.92064895072992692" blue="0.1074073389172554" alpha="1" colorSpace="calibratedRGB"/>
                                 </segmentedControl>
                                 <button opaque="NO" tag="1003" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
                                     <rect key="frame" x="429" y="5" width="37" height="30"/>
