@@ -99,7 +99,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         background.transform = CGAffineTransformMakeScale(1.5, 1.5)
 
         if let value = tile.value?.toInt()? {
-            cell.backgroundColor = UIColor.lightGrayColor()
+            cell.backgroundColor = UIColor.grayColor()
             
             if value > 0 {
                 let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
@@ -109,7 +109,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         if tile.letter? {
             if tile.display != "" {
-                cell.backgroundColor = UIColor.lightGrayColor()
+                cell.backgroundColor = UIColor.grayColor()
             }
         }
 
