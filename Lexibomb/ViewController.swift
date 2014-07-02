@@ -34,7 +34,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
-    let colors = [ UIColor.grayColor, UIColor.blueColor, UIColor.greenColor, UIColor.yellowColor, UIColor.orangeColor, UIColor.redColor ]
+    let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
+    let colors = [ UIColor.grayColor(), UIColor.blueColor(), UIColor.greenColor(), UIColor.yellowColor(), UIColor.orangeColor(), UIColor.redColor() ]
     var letters = Array<String>()
     var tiles: Tile[] = Array<Tile>()
     var rowCount:Int = 9
@@ -88,7 +89,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var tile = self.tiles[indexPath.row]
 
         if let value = tile.value?.toInt()? {
-            cell.backgroundColor = colors[value]()
+            if tile.display != "" {
+                cell.backgroundColor = colors[value]
+            }
+        }
+        else {
+            cell.backgroundColor = defaultColor
         }
 
         var label = cell.viewWithTag(1001) as UILabel
