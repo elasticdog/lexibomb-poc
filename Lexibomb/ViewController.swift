@@ -21,7 +21,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
     }
-    
 
     class Tile : Printable {
         var uid:Int?
@@ -34,7 +33,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
     }
-    
+
+    let colors = [ UIColor.grayColor, UIColor.blueColor, UIColor.greenColor, UIColor.yellowColor, UIColor.orangeColor, UIColor.redColor ]
     var letters = Array<String>()
     var tiles: Tile[] = Array<Tile>()
     var rowCount:Int = 9
@@ -86,7 +86,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         
         var tile = self.tiles[indexPath.row]
-        
+
+        if let value = tile.value?.toInt()? {
+            cell.backgroundColor = colors[value]()
+        }
+
         var label = cell.viewWithTag(1001) as UILabel
         label.text = tile.display
         
