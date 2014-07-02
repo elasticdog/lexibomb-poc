@@ -91,7 +91,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.borderWidth = 2
         cell.layer.cornerRadius = 8
-        cell.layer.borderColor = defaultColor.CGColor
         cell.backgroundColor = defaultColor
         
         var tile = self.tiles[indexPath.row]
@@ -100,27 +99,17 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         background.transform = CGAffineTransformMakeScale(1.5, 1.5)
 
         if let value = tile.value?.toInt()? {
-            cell.backgroundColor = UIColor.whiteColor()
+            cell.backgroundColor = UIColor.lightGrayColor()
             
             if value > 0 {
                 let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
                 background.image = UIImage(named:names[value])
             }
-            
-            if tile.display != "" {
-                cell.layer.borderColor = colors[value].CGColor
-            }
-        } else {
-            if tile.display != "" {
-                cell.layer.borderColor = colors[0].CGColor
-            } else {
-                cell.layer.borderColor = defaultColor.CGColor
-            }
         }
 
         if tile.letter? {
             if tile.display != "" {
-                cell.backgroundColor = UIColor.whiteColor() //colors[0]
+                cell.backgroundColor = UIColor.lightGrayColor()
             }
         }
 
@@ -157,8 +146,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
         
         tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
-//        tile.display = String("\(tile.value) \(tile.letter!)")
-        tile.display = String("\(tile.letter!)")
+        tile.display = String(tile.letter!)
         letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
         letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
         letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
