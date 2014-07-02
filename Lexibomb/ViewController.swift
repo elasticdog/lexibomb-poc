@@ -158,8 +158,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var result:UICollectionReusableView? = nil
         if kind == UICollectionElementKindSectionFooter {
             
-            if !self.footer {
-                self.footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
+            if !footer {
+                footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
+                footer!.backgroundColor = UIColor.whiteColor();
+                footer!.layer.cornerRadius = 4
+                letterBar!.tintColor = letterTileColor;
             }
             
             result = self.footer
