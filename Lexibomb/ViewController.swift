@@ -146,8 +146,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 tile.letter = nil
                 tile.display = ""
                 collectionView.reloadData()
-                return;
             }
+            return;
         }
         
         var selectedSegmentIndex = letterBar!.selectedSegmentIndex
