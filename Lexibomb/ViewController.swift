@@ -143,7 +143,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 letterBar!.selectedSegmentIndex = play.barIndex
                 letterBar!.setEnabled(true, forSegmentAtIndex: play.barIndex)
 
-                tile.letter = ""
+                tile.letter = nil
                 tile.display = ""
                 collectionView.reloadData()
                 return;
