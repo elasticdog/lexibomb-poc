@@ -161,7 +161,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if !footer {
                 footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
                 footer!.backgroundColor = UIColor.whiteColor();
-                footer!.layer.cornerRadius = 4
+                footer!.layer.cornerRadius = 1
                 letterBar!.tintColor = letterTileColor;
             }
             
