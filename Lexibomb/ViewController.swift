@@ -46,6 +46,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var tiles = Array<Tile>()
     var rowCount = 10
     let columnCount = 6
+    var bombCount = 10
     var letterBar: UISegmentedControl?
     var currentWord = Array<Play>()
     var footer: UICollectionReusableView? {
@@ -273,14 +274,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     
     func placeBombs() {
         for index in 0..columnCount * rowCount {
-            
             var tile = Tile()
-            if arc4random_uniform(7) == 0 {
-                tile.value = daBomb
-            }
-
             tile.uid = index
             tiles.append( tile )
+        }
+        
+        for times in 0..bombCount {
+            var placed = false
+            do {
+                var pick = Int(arc4random_uniform(UInt32(tiles.count)))
+                var tile = tiles[pick]
+            
+                if tile.value != daBomb {
+                    tile.value = daBomb
+                    placed = true
+                }
+            } while placed != true
         }
     }
     
