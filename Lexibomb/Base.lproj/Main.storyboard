@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WG3-aH-VcG">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6154.21" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WG3-aH-VcG">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6153.13"/>
     </dependencies>
     <scenes>
@@ -29,8 +30,8 @@
                                         <imageView opaque="NO" userInteractionEnabled="NO" tag="1005" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vjx-i2-Bpv" userLabel="Image">
                                             <rect key="frame" x="0.0" y="0.0" width="46" height="46"/>
                                         </imageView>
-                                        <label opaque="NO" clipsSubviews="YES" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="_" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdS-rL-3KM" userLabel="Label">
-                                            <rect key="frame" x="16" y="0.0" width="10" height="46"/>
+                                        <label opaque="NO" clipsSubviews="YES" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="_" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vdS-rL-3KM" userLabel="Label">
+                                            <rect key="frame" x="16.5" y="0.0" width="13" height="46"/>
                                             <fontDescription key="fontDescription" type="boldSystem" pointSize="26"/>
                                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
@@ -41,19 +42,14 @@
                                 <color key="backgroundColor" red="0.34497334197183521" green="0.4494977678571429" blue="0.3557522397491385" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="vjx-i2-Bpv" firstAttribute="bottom" secondItem="vdS-rL-3KM" secondAttribute="bottom" id="4C4-qW-oBA"/>
-                                    <constraint firstAttribute="centerX" secondItem="vjx-i2-Bpv" secondAttribute="centerX" constant="0.5" id="5BM-fw-8wp"/>
                                     <constraint firstItem="vjx-i2-Bpv" firstAttribute="leading" secondItem="2dG-yM-J2F" secondAttribute="leading" id="5x6-H2-p3k"/>
                                     <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="2dG-yM-J2F" secondAttribute="top" id="B9I-mv-TTO"/>
                                     <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="vdS-rL-3KM" secondAttribute="top" id="Qz1-yn-rYa"/>
                                     <constraint firstAttribute="bottom" secondItem="vjx-i2-Bpv" secondAttribute="bottom" id="SMm-fE-AIB"/>
                                     <constraint firstAttribute="trailing" secondItem="vjx-i2-Bpv" secondAttribute="trailing" id="Sf1-XO-EqR"/>
-                                    <constraint firstItem="vjx-i2-Bpv" firstAttribute="centerX" secondItem="vdS-rL-3KM" secondAttribute="centerX" id="WJ6-jt-fcU"/>
-                                    <constraint firstAttribute="centerY" secondItem="vjx-i2-Bpv" secondAttribute="centerY" constant="-0.5" id="XDX-0C-2Tf"/>
-                                    <constraint firstAttribute="centerY" secondItem="vjx-i2-Bpv" secondAttribute="centerY" id="ZXd-da-lRU"/>
                                     <constraint firstItem="vjx-i2-Bpv" firstAttribute="leading" secondItem="2dG-yM-J2F" secondAttribute="leading" id="ZpL-zt-wqX"/>
                                     <constraint firstItem="vjx-i2-Bpv" firstAttribute="top" secondItem="2dG-yM-J2F" secondAttribute="top" id="b4l-9c-fSE"/>
                                     <constraint firstAttribute="centerX" secondItem="vdS-rL-3KM" secondAttribute="centerX" id="lh8-95-Bci"/>
-                                    <constraint firstAttribute="centerX" secondItem="vjx-i2-Bpv" secondAttribute="centerX" id="zGc-jl-E43"/>
                                 </constraints>
                             </collectionViewCell>
                         </cells>
@@ -61,7 +57,7 @@
                             <rect key="frame" x="0.0" y="50" width="480" height="44"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <segmentedControl opaque="NO" tag="1002" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP" userLabel="Letters">
+                                <segmentedControl opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP" userLabel="Letters">
                                     <rect key="frame" x="20" y="6" width="395" height="29"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <segments>
@@ -75,7 +71,7 @@
                                     </segments>
                                     <color key="tintColor" red="0.28450045620437958" green="0.92064895072992692" blue="0.1074073389172554" alpha="1" colorSpace="calibratedRGB"/>
                                 </segmentedControl>
-                                <button opaque="NO" tag="1003" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
+                                <button opaque="NO" tag="1003" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
                                     <rect key="frame" x="429" y="5" width="37" height="30"/>
                                     <state key="normal" title="Done">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -83,6 +79,7 @@
                                 </button>
                             </subviews>
                             <constraints>
+                                <constraint firstAttribute="trailing" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="65" id="CCi-gM-DIr"/>
                                 <constraint firstItem="t4b-f3-ovP" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="20" symbolic="YES" id="Nbz-kv-kG5"/>
                                 <constraint firstAttribute="bottom" secondItem="L2k-Cc-gu6" secondAttribute="bottom" constant="9" id="RPh-df-Af6"/>
                                 <constraint firstItem="L2k-Cc-gu6" firstAttribute="leading" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="14" id="XKR-Ip-sGP"/>
