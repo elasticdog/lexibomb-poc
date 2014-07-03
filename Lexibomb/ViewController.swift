@@ -119,7 +119,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
-        if tile.value == daBomb && tile.letter {
+        if tile.value == daBomb && tilePlayed(tile) {
             cell.backgroundColor = UIColor.redColor()
         }
         
@@ -154,10 +154,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         if selectedSegmentIndex == UISegmentedControlNoSegment {
             println("Tile: \(tiles[indexPath.row])")
             return
-        }        
-        
-        if !tile.value {
-            updateTile(indexPath)
         }
         
         tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
@@ -187,6 +183,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return result
     }
     
+    func tilePlayed(tile:Tile) -> Bool {
+        var result = false
+        
+        if tile.letter {
+            result = true
+            for play in currentWord {
+                if play.tile.uid == tile.uid {
+                    result = false
+                    break
+                }
+            }
+        }
+        
+        return result
+    }
+
     func takePlayForTile(tile:Tile) -> Play? {
         var result:Play? = nil
         var index = 0
@@ -204,6 +216,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
     
     func donePressed() {
+        
+        for play in currentWord {
+            updateTileAt(pointForTile(play.tile)!)
+        }
+        currentWord.removeAll()
+        collectionView.reloadData()
         
         var bar = letterBar!
         for segment in 0..bar.numberOfSegments {
@@ -266,10 +284,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
     
-    func updateTile(indexPath:NSIndexPath) {
-        updateTileAt(pointForIndexPath(indexPath))
-    }
-    
     func tilesAroundPoint(point:Point) -> Array<Tile> {
         var aroundTiles = Array<Tile>()
         for column in point.x - 1...point.x + 1 {
@@ -287,6 +301,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     
     func updateTileAt(point:Point) {
         
+        var tile = tileAtPoint(point)
+        if tile.value {
+            return
+        }
+        
         var bombs = 0
         
         var surroundingTiles = tilesAroundPoint(point)
@@ -296,7 +315,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
-        var tile = tileAtPoint(point)
         tile.value = String("\(bombs)")
         
         if bombs == 0 {
