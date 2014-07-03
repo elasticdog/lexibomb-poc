@@ -34,14 +34,20 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
+    struct Play {
+        let tile:Tile
+        let barIndex:Int
+    }
+    
     let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
     let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     var letters = Array<String>()
-    var tiles: Tile[] = Array<Tile>()
-    var rowCount:Int = 10
-    let columnCount: Int = 6
+    var tiles = Array<Tile>()
+    var rowCount = 10
+    let columnCount = 6
     var letterBar: UISegmentedControl?
+    var currentWord = Array<Play>()
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
@@ -129,17 +135,26 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         
-        var selectedSegmentIndex = letterBar!.selectedSegmentIndex
-        if selectedSegmentIndex < 0 {
-            println("Tile: \(tiles[indexPath.row])")
-            return
+        var tile = tiles[indexPath.row]
+
+        if tile.letter {
+            if let play = takePlayForTile(tile) {
+                letterBar!.setTitle(play.tile.letter, forSegmentAtIndex:play.barIndex)
+                letterBar!.selectedSegmentIndex = play.barIndex
+                letterBar!.setEnabled(true, forSegmentAtIndex: play.barIndex)
+
+                tile.letter = ""
+                tile.display = ""
+                collectionView.reloadData()
+                return;
+            }
         }
         
-        var tile = tiles[indexPath.row]
- 
-        if tile.letter {
+        var selectedSegmentIndex = letterBar!.selectedSegmentIndex
+        if selectedSegmentIndex == UISegmentedControlNoSegment {
+            println("Tile: \(tiles[indexPath.row])")
             return
-        }
+        }        
         
         if !tile.value {
             updateTile(indexPath)
@@ -150,7 +165,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
         letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
         letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
-        
+
+        currentWord.append(Play(tile:tile, barIndex:selectedSegmentIndex))
         self.collectionView.reloadData()
     }
 
@@ -166,6 +182,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
             
             result = self.footer
+        }
+        
+        return result
+    }
+    
+    func takePlayForTile(tile:Tile) -> Play? {
+        var result:Play? = nil
+        var index = 0
+
+        for play in currentWord {
+            if play.tile.uid == tile.uid {
+                result = play
+                currentWord.removeAtIndex(index)
+                break
+            }
+            index++
         }
         
         return result
