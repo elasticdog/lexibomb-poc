@@ -39,8 +39,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     var letters = Array<String>()
     var tiles: Tile[] = Array<Tile>()
-    var rowCount:Int = 9
-    let columnCount: Int = 5
+    var rowCount:Int = 10
+    let columnCount: Int = 6
     var letterBar: UISegmentedControl?
     var footer: UICollectionReusableView? {
         didSet {
@@ -70,8 +70,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     init(coder aDecoder: NSCoder!)  {
         
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            columnCount = 12
-            rowCount = 12
+            columnCount = 15
+            rowCount = 15
         }
         
         super.init(coder: aDecoder)
