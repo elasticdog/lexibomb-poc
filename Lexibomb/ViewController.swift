@@ -10,9 +10,22 @@ import UIKit
 
 let daBomb = "💣"
 
+@infix func +(left:ViewController.Point, right:ViewController.Point) -> ViewController.Point {
+    return ViewController.Point(x:left.x + right.x, y:left.y + right.y)
+}
+
+@infix func ==(left:ViewController.Point, right:ViewController.Point) -> Bool {
+    return left.x == right.x &&  left.y == right.y
+}
+
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    struct Point : Printable {
+    enum WordOrientation {
+        case Horizontal
+        case Vertical
+    }
+    
+    struct Point : Printable, Equatable {
         let x:Int
         let y:Int
         var description:String {
@@ -39,16 +52,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let barIndex:Int
     }
     
-    let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
-    let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
-    let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
-    var letters = Array<String>()
-    var tiles = Array<Tile>()
-    var rowCount = 10
     let columnCount = 6
+    let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
+    let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
+    let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
+
     var bombCount = 10
-    var letterBar: UISegmentedControl?
     var currentWord = Array<Play>()
+    var currentWordOrientation:WordOrientation?
+    var letterBar: UISegmentedControl?
+    var letters = Array<String>()
+    var rowCount = 10
+    var tiles = Array<Tile>()
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
@@ -153,8 +168,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         var selectedSegmentIndex = letterBar!.selectedSegmentIndex
         if selectedSegmentIndex == UISegmentedControlNoSegment {
-            println("Tile: \(tiles[indexPath.row])")
+            println("Tile: \(tile)")
             return
+        }
+        
+        if !checkPlay(tile) {
+            return;
         }
         
         tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
@@ -182,6 +201,117 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
         
         return result
+    }
+    
+    func contiguousLettersFrom(tile:Tile, toTile:Tile) -> Bool {
+        var contiguous = true
+        
+        var dx = 0
+        var dy = 0
+        var originPoint = pointForTile(tile)!
+        var destinationPoint = pointForTile(toTile)!
+        
+        if originPoint.x == destinationPoint.x {
+            if originPoint.y < destinationPoint.y {
+                dy = 1
+            } else {
+                dy = -1
+            }
+        } else if originPoint.y == destinationPoint.y {
+            if originPoint.x < destinationPoint.x {
+                dx = 1
+            } else {
+                dx = -1
+            }
+        } else {
+            return false
+        }
+        
+        var iterator = Point(x:dx, y:dy)
+        var currentPoint = originPoint + iterator
+        while currentPoint != destinationPoint {
+            if let currentTile = tileAtPoint(currentPoint) {
+                if !currentTile.letter {
+                    contiguous = false
+                    break
+                }
+            } else {
+                break
+            }
+            currentPoint = currentPoint + iterator
+        }
+        
+        return contiguous
+    }
+    
+    func checkPlay(tile:Tile) -> Bool {
+        var valid = true
+        
+        if currentWord.count > 0 {
+            if currentWord.count == 1 {
+                var initialPlay = currentWord[0]
+                var referencePoint = pointForTile(initialPlay.tile)!
+                var tilePoint = pointForTile(tile)!
+                switch (tilePoint.x, tilePoint.y) {
+                    case (referencePoint.x + 1, referencePoint.y), (referencePoint.x - 1, referencePoint.y):
+                        currentWordOrientation = WordOrientation.Horizontal
+                        valid = true
+                    
+                    case (referencePoint.x, referencePoint.y + 1), (referencePoint.x, referencePoint.y - 1):
+                        currentWordOrientation = WordOrientation.Vertical
+                        valid = true
+                    
+                    default:
+                        valid = contiguousLettersFrom(initialPlay.tile, toTile:tile)
+                    
+                        if valid {
+                            if referencePoint.y == tilePoint.y {
+                                currentWordOrientation = WordOrientation.Horizontal
+                            } else {
+                                currentWordOrientation = WordOrientation.Vertical
+                            }
+                        }
+                }
+            } else {
+                var decrement = Point(x:0, y:-1)
+                var increment = Point(x:0, y:1)
+                if currentWordOrientation! == .Horizontal {
+                    decrement = Point(x:-1, y:0)
+                    increment = Point(x:1, y:0)
+                }
+                
+                var start = currentWord[0].tile
+                while start.letter {
+                    if let previous = tileAtPoint(pointForTile(start)! + decrement) {
+                        start = previous
+                    } else {
+                        return false
+                    }
+                }
+                
+                var end = currentWord[currentWord.count - 1].tile
+                while end.letter {
+                    if let next = tileAtPoint(pointForTile(end)! + increment) {
+                        end = next
+                    } else {
+                        return false
+                    }
+                }
+                
+                var tilePoint = pointForTile(tile)!
+                var startPoint = pointForTile(start)!
+                var endPoint = pointForTile(end)!
+                switch ( tilePoint ) {
+                    case startPoint, endPoint:
+                        valid = true
+
+                default:
+                        valid = false
+                }
+            }
+        }
+        
+        return valid
     }
     
     func tilePlayed(tile:Tile) -> Bool {
@@ -268,8 +398,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return pointForIndex(indexPath.row)
     }
     
-    func tileAtPoint(point:Point) -> Tile {
-        return tiles[point.y * columnCount + point.x]
+    func tileAtPoint(point:Point) -> Tile? {
+        var index = point.y * columnCount + point.x
+        
+        if tiles.count > index {
+            return tiles[index]
+        } else {
+            return nil
+        }
     }
     
     func placeBombs() {
@@ -299,7 +435,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if column > -1 && column < columnCount  {
                 for row in point.y - 1...point.y + 1 {
                     if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
-                        aroundTiles += tileAtPoint(Point(x:column, y:row))
+                        aroundTiles += tileAtPoint(Point(x:column, y:row))!
                     }
                 }
             }
@@ -310,7 +446,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     
     func updateTileAt(point:Point) {
         
-        var tile = tileAtPoint(point)
+        var tile = tileAtPoint(point)!
         if tile.value {
             return
         }
