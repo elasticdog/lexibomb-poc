@@ -57,7 +57,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
 
-    var bombCount = 10
+    var bombCount = 20
     var currentWord = Array<Play>()
     var currentWordOrientation:WordOrientation?
     var letterBar: UISegmentedControl?
