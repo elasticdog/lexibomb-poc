@@ -129,10 +129,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
-        if tile.letter? {
-            if tile.display != "" {
-                cell.backgroundColor = letterTileColor
-            }
+        if tile.letter? && tilePlayed(tile) {
+            cell.backgroundColor = letterTileColor
+        } else if tile.letter? {
+            cell.backgroundColor = UIColor.grayColor()
         }
 
         if tile.value == daBomb && tilePlayed(tile) {
