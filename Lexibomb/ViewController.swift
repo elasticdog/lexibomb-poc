@@ -83,7 +83,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 }
                 
                 if let button = view.viewWithTag(1003) as? UIButton {
-                    button.addTarget(self, action:"donePressed", forControlEvents:.TouchUpInside)
+                    button.addTarget(self, action:"playPressed", forControlEvents:.TouchUpInside)
                 }
             }
         }
@@ -346,7 +346,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return result
     }
     
-    func donePressed() {
+    func playPressed() {
         
         for play in currentWord {
             updateTileAt(pointForTile(play.tile)!)
