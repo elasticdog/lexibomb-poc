@@ -19,12 +19,12 @@ let daBomb = "💣"
 }
 
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-    
+
     enum WordOrientation {
         case Horizontal
         case Vertical
     }
-    
+
     struct Point : Printable, Equatable {
         let x:Int
         let y:Int
@@ -51,7 +51,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let tile:Tile
         let barIndex:Int
     }
-    
+
     let columnCount = 6
     let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
@@ -68,53 +68,51 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         didSet {
             if let view = footer {
                 letterBar = view.viewWithTag(1002) as? UISegmentedControl
-                
+
                 if let control = letterBar {
-                    
+
                     for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
                         letters.append( String(character) )
                     }
-                    
+
                     for segment in 0..control.numberOfSegments {
                         control.setTitle( takeLetter(), forSegmentAtIndex: segment )
                     }
-                    
+
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
-                
+
                 if let button = view.viewWithTag(1003) as? UIButton {
                     button.addTarget(self, action:"playPressed", forControlEvents:.TouchUpInside)
                 }
             }
         }
     }
-    
+
     init(coder aDecoder: NSCoder!)  {
-        
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             columnCount = 15
             rowCount = 15
         }
-        
+
         super.init(coder: aDecoder)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         placeBombs()
     }
-    
+
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
-    
+
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
-        
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.cornerRadius = 8
         cell.backgroundColor = defaultColor
-        
+
         var tile = self.tiles[indexPath.row]
         var background = cell.viewWithTag(1005) as UIImageView
         background.image = nil
@@ -123,7 +121,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         if let value = tile.value?.toInt()? {
             cell.backgroundColor = UIColor.whiteColor()
-            
+
             if value > 0 {
                 background.image = UIImage(named:names[value])
             }
@@ -138,19 +136,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         if tile.value == daBomb && tilePlayed(tile) {
             cell.backgroundColor = UIColor.redColor()
         }
-        
+
         var label = cell.viewWithTag(1001) as UILabel
         label.text = tile.display
-        
+
         return cell
     }
-    
+
     override func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
         return self.tiles.count
     }
-    
+
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
-        
         var tile = tiles[indexPath.row]
 
         if tile.letter {
@@ -165,7 +162,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
             return;
         }
-        
+
         var selectedSegmentIndex = letterBar!.selectedSegmentIndex
         if selectedSegmentIndex == UISegmentedControlNoSegment {
             println("Tile: \(tile)")
@@ -184,29 +181,30 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
         var result:UICollectionReusableView? = nil
+
         if kind == UICollectionElementKindSectionFooter {
-            
+
             if !footer {
                 footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
                 footer!.backgroundColor = UIColor.whiteColor();
                 footer!.layer.cornerRadius = 1
                 letterBar!.tintColor = letterTileColor;
             }
-            
+
             result = self.footer
         }
-        
+
         return result
     }
-    
+
     func contiguousLettersFrom(tile:Tile, toTile:Tile) -> Bool {
         var contiguous = true
-        
+
         var dx = 0
         var dy = 0
         var originPoint = pointForTile(tile)!
         var destinationPoint = pointForTile(toTile)!
-        
+
         if originPoint.x == destinationPoint.x {
             if originPoint.y < destinationPoint.y {
                 dy = 1
@@ -222,7 +220,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         } else {
             return false
         }
-        
+
         var iterator = Point(x:dx, y:dy)
         var currentPoint = originPoint + iterator
         while currentPoint != destinationPoint {
@@ -236,7 +234,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
             currentPoint = currentPoint + iterator
         }
-        
+
         return contiguous
     }
 
@@ -302,7 +300,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func tilePlayed(tile:Tile) -> Bool {
         var result = false
-        
+
         if tile.letter {
             result = true
             for play in currentWord {
@@ -312,7 +310,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 }
             }
         }
-        
+
         return result
     }
 
@@ -328,18 +326,21 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
             index++
         }
-        
+
         return result
     }
-    
+
     func playPressed() {
-        
+        if !checkPlay() {
+            return;
+        }
+
         for play in currentWord {
             updateTileAt(pointForTile(play.tile)!)
         }
         currentWord.removeAll()
         collectionView.reloadData()
-        
+
         var bar = letterBar!
         for segment in 0..bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
@@ -349,17 +350,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
     }
-    
+
     func takeLetter() -> String {
         var location = Int(arc4random_uniform(UInt32(letters.count)))
         var letter = letters[location]
+
         letters.removeAtIndex(location)
+
         return letter
     }
-    
+
     func pointForTile(tile:Tile) -> Point? {
-        
         var index = 0
+
         for checkTile in tiles {
             if let uid = checkTile.uid {
                 if let tuid = tile.uid {
@@ -370,43 +373,44 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
             index++
         }
-        
+
         return nil
     }
-    
+
     func pointForIndex(index: Int) -> Point {
         var row = index / self.columnCount
         var column = index % self.columnCount
+
         return Point(x: column, y: row)
     }
-    
+
     func pointForIndexPath(indexPath: NSIndexPath) -> Point {
         return pointForIndex(indexPath.row)
     }
-    
+
     func tileAtPoint(point:Point) -> Tile? {
         var index = point.y * columnCount + point.x
-        
+
         if tiles.count > index {
             return tiles[index]
         } else {
             return nil
         }
     }
-    
+
     func placeBombs() {
         for index in 0..columnCount * rowCount {
             var tile = Tile()
             tile.uid = index
             tiles.append( tile )
         }
-        
-        for times in 0..bombCount {
+
+        for bomb in 0..bombCount {
             var placed = false
             do {
                 var pick = Int(arc4random_uniform(UInt32(tiles.count)))
                 var tile = tiles[pick]
-            
+
                 if tile.value != daBomb {
                     tile.value = daBomb
                     placed = true
@@ -414,9 +418,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             } while placed != true
         }
     }
-    
+
     func tilesAroundPoint(point:Point) -> Array<Tile> {
         var aroundTiles = Array<Tile>()
+
         for column in point.x - 1...point.x + 1 {
             if column > -1 && column < columnCount  {
                 for row in point.y - 1...point.y + 1 {
@@ -426,19 +431,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 }
             }
         }
-        
+
         return aroundTiles
     }
-    
+
     func updateTileAt(point:Point) {
-        
         var tile = tileAtPoint(point)!
+
         if tile.value {
             return
         }
-        
+
         var bombs = 0
-        
+
         var surroundingTiles = tilesAroundPoint(point)
         for checkTile in surroundingTiles {
             if checkTile.value == daBomb {
@@ -447,7 +452,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         tile.value = String("\(bombs)")
-        
+
         if bombs == 0 {
             for checkTile in surroundingTiles {
                 if checkTile.value {
@@ -459,5 +464,5 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
     }
-}
 
+}
