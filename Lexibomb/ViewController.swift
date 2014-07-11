@@ -292,8 +292,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func checkPlay() -> Bool {
         var first = firstTileInWord()
         var last = lastTileInWord()
-        println(first)
-        println(last)
+        println("First Letter: \(first)")
+        println("Last Letter:  \(last)")
 
         return contiguousLettersFrom(first, toTile:last)
     }
