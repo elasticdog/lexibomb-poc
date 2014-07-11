@@ -198,6 +198,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func contiguousLettersFrom(tile:Tile, toTile:Tile) -> Bool {
+        if tile.uid == toTile.uid {
+            return true
+        }
+
         var contiguous = true
 
         var dx = 0
