@@ -171,11 +171,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             println("Tile: \(tile)")
             return
         }
-        
-        if !checkPlay(tile) {
-            return;
-        }
-        
+
         tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
         tile.display = String(tile.letter!)
         letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
@@ -243,77 +239,67 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         
         return contiguous
     }
-    
-    func checkPlay(tile:Tile) -> Bool {
-        var valid = true
-        
-        if currentWord.count > 0 {
-            if currentWord.count == 1 {
-                var initialPlay = currentWord[0]
-                var referencePoint = pointForTile(initialPlay.tile)!
-                var tilePoint = pointForTile(tile)!
-                switch (tilePoint.x, tilePoint.y) {
-                    case (referencePoint.x + 1, referencePoint.y), (referencePoint.x - 1, referencePoint.y):
-                        currentWordOrientation = WordOrientation.Horizontal
-                        valid = true
-                    
-                    case (referencePoint.x, referencePoint.y + 1), (referencePoint.x, referencePoint.y - 1):
-                        currentWordOrientation = WordOrientation.Vertical
-                        valid = true
-                    
-                    default:
-                        valid = contiguousLettersFrom(initialPlay.tile, toTile:tile)
-                    
-                        if valid {
-                            if referencePoint.y == tilePoint.y {
-                                currentWordOrientation = WordOrientation.Horizontal
-                            } else {
-                                currentWordOrientation = WordOrientation.Vertical
-                            }
-                        }
-                }
-            } else {
-                var decrement = Point(x:0, y:-1)
-                var increment = Point(x:0, y:1)
-                if currentWordOrientation! == .Horizontal {
-                    decrement = Point(x:-1, y:0)
-                    increment = Point(x:1, y:0)
-                }
-                
-                var start = currentWord[0].tile
-                while start.letter {
-                    if let previous = tileAtPoint(pointForTile(start)! + decrement) {
-                        start = previous
-                    } else {
-                        return false
-                    }
-                }
-                
-                var end = currentWord[currentWord.count - 1].tile
-                while end.letter {
-                    if let next = tileAtPoint(pointForTile(end)! + increment) {
-                        end = next
-                    } else {
-                        return false
-                    }
-                }
-                
-                var tilePoint = pointForTile(tile)!
-                var startPoint = pointForTile(start)!
-                var endPoint = pointForTile(end)!
-                switch ( tilePoint ) {
-                    case startPoint, endPoint:
-                        valid = true
 
-                default:
-                        valid = false
-                }
+    func abs(i:Int) -> Int {
+        if i < 0 {
+            return 0 - i
+        } else {
+            return i
+        }
+    }
+
+    func tileDistance(tile:Tile, toTile:Tile) -> Double {
+        var originPoint = pointForTile(tile)!
+        var destinationPoint = pointForTile(toTile)!
+
+        var dx = abs(originPoint.x - destinationPoint.x)
+        var dy = abs(originPoint.y - destinationPoint.y)
+        var distance = sqrt(pow(Double(dx), 2.0) + pow(Double(dy), 2.0))
+
+        return distance
+    }
+
+    func firstTileInWord() -> Tile {
+        var upperLeftTile = tileAtPoint(Point(x: 0, y: 0))
+        var closestTile = currentWord[0].tile
+        var distance = tileDistance(upperLeftTile!, toTile:closestTile)
+
+        for play in currentWord {
+            var candidateDistance = tileDistance(upperLeftTile!, toTile:play.tile)
+            if candidateDistance < distance {
+                closestTile = play.tile
+                distance = candidateDistance
             }
         }
-        
-        return valid
+
+        return closestTile
     }
-    
+
+    func lastTileInWord() -> Tile {
+        var lowerRightTile = tileAtPoint(Point(x: self.columnCount - 1, y: self.rowCount - 1))
+        var closestTile = currentWord[0].tile
+        var distance = tileDistance(lowerRightTile!, toTile:closestTile)
+
+        for play in currentWord {
+            var candidateDistance = tileDistance(lowerRightTile!, toTile:play.tile)
+            if candidateDistance < distance {
+                closestTile = play.tile
+                distance = candidateDistance
+            }
+        }
+
+        return closestTile
+    }
+
+    func checkPlay() -> Bool {
+        var first = firstTileInWord()
+        var last = lastTileInWord()
+        println(first)
+        println(last)
+
+        return contiguousLettersFrom(first, toTile:last)
+    }
+
     func tilePlayed(tile:Tile) -> Bool {
         var result = false
         
