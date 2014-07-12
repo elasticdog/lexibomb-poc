@@ -57,7 +57,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
 
-    var bombCount = 20
+    var bombCount = 25
     var currentWord = Array<Play>()
     var currentWordOrientation:WordOrientation?
     var letterBar: UISegmentedControl?
@@ -195,6 +195,17 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         return result
+    }
+
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+        if (motion == UIEventSubtype.MotionShake) {
+            for index in 0..self.columnCount * self.rowCount {
+                var point = pointForIndex(index)
+                var tile = tiles[index]
+                updateTileAt(point)
+            }
+        }
+        self.collectionView.reloadData()
     }
 
     func contiguousLettersFrom(tile:Tile, toTile:Tile) -> Bool {
