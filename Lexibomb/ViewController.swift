@@ -57,13 +57,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
 
-    var bombCount = 25
+    var bombCount = 22
     var currentWord = Array<Play>()
     var currentWordOrientation:WordOrientation?
     var letterBar: UISegmentedControl?
     var letters = Array<String>()
     var rowCount = 10
     var tiles = Array<Tile>()
+    @IBOutlet var playButton: UIButton
+
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
@@ -310,7 +312,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         println("First Letter: \(first)")
         println("Last Letter:  \(last)")
 
-        return contiguousLettersFrom(first, toTile:last)
+        var valid = contiguousLettersFrom(first, toTile:last)
+
+        return valid
     }
 
     func tilePlayed(tile:Tile) -> Bool {
