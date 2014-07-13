@@ -77,7 +77,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                         letters.append( String(character) )
                     }
 
-                    for segment in 0..control.numberOfSegments {
+                    for segment in 0..<control.numberOfSegments {
                         control.setTitle( takeLetter(), forSegmentAtIndex: segment )
                     }
 
@@ -201,7 +201,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
         if (motion == UIEventSubtype.MotionShake) {
-            for index in 0..self.columnCount * self.rowCount {
+            for index in 0..<self.columnCount * self.rowCount {
                 var point = pointForIndex(index)
                 var tile = tiles[index]
                 updateTileAt(point)
@@ -361,7 +361,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         collectionView.reloadData()
 
         var bar = letterBar!
-        for segment in 0..bar.numberOfSegments {
+        for segment in 0..<bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
                 bar.setTitle( takeLetter(), forSegmentAtIndex: segment )
                 bar.setEnabled(true, forSegmentAtIndex: segment)
@@ -418,13 +418,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func placeBombs() {
-        for index in 0..columnCount * rowCount {
+        for index in 0..<columnCount * rowCount {
             var tile = Tile()
             tile.uid = index
             tiles.append( tile )
         }
 
-        for bomb in 0..bombCount {
+        for bomb in 0..<bombCount {
             var placed = false
             do {
                 var pick = Int(arc4random_uniform(UInt32(tiles.count)))
