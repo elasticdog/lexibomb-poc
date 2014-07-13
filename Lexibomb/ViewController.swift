@@ -52,7 +52,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let barIndex:Int
     }
 
-    let columnCount = 6
     let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
     let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
     let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
@@ -63,8 +62,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var letterBar: UISegmentedControl?
     var playButton: UIButton!
     var letters = Array<String>()
+    var columnCount = 6
     var rowCount = 10
     var tiles = Array<Tile>()
+    var firstPlay = true
 
     var footer: UICollectionReusableView? {
         didSet {
@@ -162,6 +163,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 tile.letter = nil
                 tile.display = ""
                 collectionView.reloadData()
+                checkPlay()
             }
             return;
         }
@@ -258,64 +260,61 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return contiguous
     }
 
-    func abs(i:Int) -> Int {
-        if i < 0 {
-            return 0 - i
-        } else {
-            return i
-        }
-    }
-
-    func tileDistance(tile:Tile, toTile:Tile) -> Double {
-        var originPoint = pointForTile(tile)!
-        var destinationPoint = pointForTile(toTile)!
-
-        var dx = abs(originPoint.x - destinationPoint.x)
-        var dy = abs(originPoint.y - destinationPoint.y)
-        var distance = sqrt(pow(Double(dx), 2.0) + pow(Double(dy), 2.0))
-
-        return distance
-    }
-
-    func firstTileInWord() -> Tile {
-        var upperLeftTile = tileAtPoint(Point(x: 0, y: 0))
-        var closestTile = currentWord[0].tile
-        var distance = tileDistance(upperLeftTile!, toTile:closestTile)
-
+    func tileInCurrentWord(tile:Tile) -> Bool {
+        var contained = false
         for play in currentWord {
-            var candidateDistance = tileDistance(upperLeftTile!, toTile:play.tile)
-            if candidateDistance < distance {
-                closestTile = play.tile
-                distance = candidateDistance
+            if play.tile === tile {
+                contained = true
+                break
+            }
+        }
+        return contained
+    }
+
+    func hasAdjacentTile(tile:Tile) -> Bool {
+        var aroundTiles = Array<Tile>()
+        let tilePoint = pointForTile(tile)!
+
+        if let left = tileAtPoint(tilePoint + Point(x:-1, y:0)) {
+            aroundTiles += left
+        }
+        if let right = tileAtPoint(tilePoint + Point(x:1, y:0)) {
+            aroundTiles += right
+        }
+        if let above = tileAtPoint(tilePoint + Point(x:0, y:-1)) {
+            aroundTiles += above
+        }
+        if let below = tileAtPoint(tilePoint + Point(x:0, y:1)) {
+            aroundTiles += below
+        }
+
+        var adjacent = false
+        for tile in aroundTiles {
+            if tile.display != "" && !tileInCurrentWord(tile) {
+                adjacent = true
+                break
             }
         }
 
-        return closestTile
-    }
-
-    func lastTileInWord() -> Tile {
-        var lowerRightTile = tileAtPoint(Point(x: self.columnCount - 1, y: self.rowCount - 1))
-        var closestTile = currentWord[0].tile
-        var distance = tileDistance(lowerRightTile!, toTile:closestTile)
-
-        for play in currentWord {
-            var candidateDistance = tileDistance(lowerRightTile!, toTile:play.tile)
-            if candidateDistance < distance {
-                closestTile = play.tile
-                distance = candidateDistance
-            }
-        }
-
-        return closestTile
+        return adjacent
     }
 
     func checkPlay() -> Bool {
-        var first = firstTileInWord()
-        var last = lastTileInWord()
-        println("First Letter: \(first)")
-        println("Last Letter:  \(last)")
+        var valid = false
+        if !firstPlay {
+            for play in currentWord {
+                if hasAdjacentTile(play.tile) {
+                    valid = true
+                    break
+                }
+            }
+        } else {
+            valid = true
+        }
 
-        var valid = contiguousLettersFrom(first, toTile:last)
+        if valid {
+            //valid = contiguousLettersFrom(first, toTile:last)
+        }
 
         playButton!.enabled = valid
         return valid
@@ -369,6 +368,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
+        firstPlay = false
+        playButton!.enabled = false
     }
 
     func takeLetter() -> String {
