@@ -61,15 +61,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var currentWord = Array<Play>()
     var currentWordOrientation:WordOrientation?
     var letterBar: UISegmentedControl?
+    var playButton: UIButton!
     var letters = Array<String>()
     var rowCount = 10
     var tiles = Array<Tile>()
-    @IBOutlet var playButton: UIButton
 
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
                 letterBar = view.viewWithTag(1002) as? UISegmentedControl
+                playButton = view.viewWithTag(1003) as? UIButton
 
                 if let control = letterBar {
 
@@ -84,7 +85,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
 
-                if let button = view.viewWithTag(1003) as? UIButton {
+                if let button = playButton {
                     button.addTarget(self, action:"playPressed", forControlEvents:.TouchUpInside)
                 }
             }
@@ -178,7 +179,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
 
         currentWord.append(Play(tile:tile, barIndex:selectedSegmentIndex))
+
         self.collectionView.reloadData()
+        checkPlay()
     }
 
     override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
@@ -314,6 +317,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var valid = contiguousLettersFrom(first, toTile:last)
 
+        playButton!.enabled = valid
         return valid
     }
 
@@ -350,9 +354,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func playPressed() {
-        if !checkPlay() {
-            return;
-        }
 
         for play in currentWord {
             updateTileAt(pointForTile(play.tile)!)
