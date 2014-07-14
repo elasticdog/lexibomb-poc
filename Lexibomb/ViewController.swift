@@ -299,7 +299,48 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return adjacent
     }
 
-    func checkPlay() -> Bool {
+    func isCurrentWordOriented() -> Bool {
+        var oriented = true
+
+        if currentWord.count <= 1 {
+            currentWordOrientation = nil
+        } else {
+            var startingPoint = pointForTile(currentWord[0].tile)!
+
+            for play in currentWord[1..<currentWord.count] {
+                var tilePoint = pointForTile(play.tile)!
+
+                if let orientation = currentWordOrientation {
+                    if orientation == WordOrientation.Horizontal {
+                        if tilePoint.x != startingPoint.x {
+                            oriented = false
+                            currentWordOrientation = nil
+                            break
+                        }
+                    } else if orientation == WordOrientation.Vertical {
+                        if tilePoint.y != startingPoint.y {
+                            oriented = false
+                            currentWordOrientation = nil
+                            break
+                        }
+                    }
+                } else {
+                    if tilePoint.x == startingPoint.x {
+                        currentWordOrientation = WordOrientation.Horizontal
+                    } else if tilePoint.y == startingPoint.y {
+                        currentWordOrientation = WordOrientation.Vertical
+                    } else {
+                        oriented = false
+                        break
+                    }
+                }
+            }
+        }
+
+        return oriented
+    }
+
+    func checkPlay() {
         var valid = false
         if !firstPlay {
             for play in currentWord {
@@ -313,11 +354,26 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         if valid {
-            //valid = contiguousLettersFrom(first, toTile:last)
+            valid = isCurrentWordOriented()
+        }
+
+        if valid {
+            // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
+            // and then check that all of the currentWord[] tiles are contained in it
+        }
+
+        if valid {
+            // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
+            // and then check that it is a valid dictionary word
+        }
+
+        if valid {
+            // go through each letter in currentWord[]
+            // and grab the contiguous word along the opposite of currentWordOrientation;
+            // if the contiguous word has a length > 1, then check that it's a valid dict ionary word
         }
 
         playButton!.enabled = valid
-        return valid
     }
 
     func tilePlayed(tile:Tile) -> Bool {
