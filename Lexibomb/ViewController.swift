@@ -215,52 +215,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         self.collectionView.reloadData()
     }
 
-    func contiguousLettersFrom(tile:Tile, toTile:Tile) -> Bool {
-        if tile.uid == toTile.uid {
-            return true
-        }
-
-        var contiguous = true
-
-        var dx = 0
-        var dy = 0
-        var originPoint = pointForTile(tile)!
-        var destinationPoint = pointForTile(toTile)!
-
-        if originPoint.x == destinationPoint.x {
-            if originPoint.y < destinationPoint.y {
-                dy = 1
-            } else {
-                dy = -1
-            }
-        } else if originPoint.y == destinationPoint.y {
-            if originPoint.x < destinationPoint.x {
-                dx = 1
-            } else {
-                dx = -1
-            }
-        } else {
-            return false
-        }
-
-        var iterator = Point(x:dx, y:dy)
-        var currentPoint = originPoint + iterator
-        while currentPoint != destinationPoint {
-            if let currentTile = tileAtPoint(currentPoint) {
-                if !currentTile.letter {
-                    contiguous = false
-                    break
-                }
-            } else {
-                break
-            }
-            currentPoint = currentPoint + iterator
-        }
-
-        return contiguous
-    }
-
-    func tileInCurrentWord(tile:Tile) -> Bool {
+    func tileInCurrentWord(tile: Tile) -> Bool {
         var contained = false
         for play in currentWord {
             if play.tile === tile {
@@ -271,8 +226,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return contained
     }
 
-    func hasAdjacentTile(tile:Tile) -> Bool {
-        var aroundTiles = Array<Tile>()
+    func hasAdjacentTile(tile: Tile) -> Bool {
+        var aroundTiles = [Tile]()
         let tilePoint = pointForTile(tile)!
 
         if let left = tileAtPoint(tilePoint + Point(x:-1, y:0)) {
@@ -312,22 +267,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
                 if let orientation = currentWordOrientation {
                     if orientation == WordOrientation.Horizontal {
-                        if tilePoint.x != startingPoint.x {
+                        if tilePoint.y != startingPoint.y {
                             oriented = false
                             currentWordOrientation = nil
                             break
                         }
                     } else if orientation == WordOrientation.Vertical {
-                        if tilePoint.y != startingPoint.y {
+                        if tilePoint.x != startingPoint.x {
                             oriented = false
                             currentWordOrientation = nil
                             break
                         }
                     }
                 } else {
-                    if tilePoint.x == startingPoint.x {
+                    if tilePoint.y == startingPoint.y {
                         currentWordOrientation = WordOrientation.Horizontal
-                    } else if tilePoint.y == startingPoint.y {
+                    } else if tilePoint.x == startingPoint.x {
                         currentWordOrientation = WordOrientation.Vertical
                     } else {
                         oriented = false
@@ -340,8 +295,64 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return oriented
     }
 
+    func contiguousTiles(startingTile: Tile, orientation: WordOrientation) -> [Tile] {
+        var decrement = Point(x:-1, y:0)
+        var increment = Point(x:1, y:0)
+
+        if orientation == WordOrientation.Vertical {
+            decrement = Point(x:0, y:-1)
+            increment = Point(x:0, y:1)
+        }
+
+        var begin = startingTile
+        while begin.letter {
+            if let previousTile = tileAtPoint(pointForTile(begin)! + decrement) {
+                if !previousTile.letter {
+                    break
+                } else {
+                    begin = previousTile
+                }
+            }
+        }
+
+        var end = startingTile
+        while end.letter {
+            if let nextTile = tileAtPoint(pointForTile(end)! + increment) {
+                if !nextTile.letter {
+                    break
+                } else {
+                    end = nextTile
+                }
+            }
+        }
+
+        var tiles = [Tile]()
+        while begin !== end {
+            tiles.append(begin)
+            begin = tileAtPoint(pointForTile(begin)! + increment)!
+        }
+        tiles.append(begin)
+
+        return tiles
+    }
+
+    func wordContainsAllPlays(word: [Tile]) -> Bool {
+        var valid = true
+        var currentWordTiles = currentWord.map { $0.tile }
+
+        for tile in currentWordTiles {
+            if !contains(word, {$0 === tile}) {
+                valid = false
+                break
+            }
+        }
+
+        return valid
+    }
+
     func checkPlay() {
         var valid = false
+
         if !firstPlay {
             for play in currentWord {
                 if hasAdjacentTile(play.tile) {
@@ -354,12 +365,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         if valid {
+            // ensure that all of the tiles within currentWord[] are contained
+            // within a single row or a single column
             valid = isCurrentWordOriented()
         }
 
         if valid {
             // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
             // and then check that all of the currentWord[] tiles are contained in it
+            if currentWord.count > 1 {
+                var wordTiles = contiguousTiles(currentWord[0].tile, orientation: currentWordOrientation!)
+                valid = wordContainsAllPlays(wordTiles)
+            }
         }
 
         if valid {
@@ -370,7 +387,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         if valid {
             // go through each letter in currentWord[]
             // and grab the contiguous word along the opposite of currentWordOrientation;
-            // if the contiguous word has a length > 1, then check that it's a valid dict ionary word
+            // if the contiguous word has a length > 1, then check that it's a valid dictionary word
         }
 
         playButton!.enabled = valid
