@@ -396,12 +396,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func currentWordLexigraphical() -> Bool {
         let word = join("", currentWord.map { $0.tile.display.lowercaseString })
         
-        let range = NSRange(location: 0, length: currentWord.count)
+        let range = NSRange(location:0, length:currentWord.count)
         let nonlex = UITextChecker().rangeOfMisspelledWordInString(word,
-                                                       range:range,
-                                                  startingAt:0,
-                                                        wrap:false,
-                                                    language:"en_US")
+                                                             range:range,
+                                                        startingAt:0,
+                                                              wrap:false,
+                                                          language:"en_US")
         return nonlex.location == NSNotFound
     }
     
