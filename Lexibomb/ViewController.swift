@@ -381,6 +381,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         if valid {
             // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
             // and then check that it is a valid dictionary word
+            valid = currentWordLexigraphical()
         }
 
         if valid {
@@ -392,6 +393,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         playButton!.enabled = valid
     }
 
+    func currentWordLexigraphical() -> Bool {
+        let word = join("", currentWord.map { $0.tile.display.lowercaseString })
+        
+        let range = NSRange(location: 0, length: currentWord.count)
+        let nonlex = UITextChecker().rangeOfMisspelledWordInString(word,
+                                                       range:range,
+                                                  startingAt:0,
+                                                        wrap:false,
+                                                    language:"en_US")
+        return nonlex.location == NSNotFound
+    }
+    
     func tilePlayed(tile:Tile) -> Bool {
         var result = false
 
