@@ -57,14 +57,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
 
     var bombCount = 22
-    var currentWord = Array<Play>()
+    var currentWord = [Play]()
     var currentWordOrientation:WordOrientation?
     var letterBar: UISegmentedControl?
     var playButton: UIButton!
-    var letters = Array<String>()
+    var letters = [String]()
     var columnCount = 6
     var rowCount = 10
-    var tiles = Array<Tile>()
+    var tiles = [Tile]()
     var firstPlay = true
 
     var footer: UICollectionReusableView? {
@@ -74,7 +74,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 playButton = view.viewWithTag(1003) as? UIButton
 
                 if let control = letterBar {
-
                     for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
                         letters.append( String(character) )
                     }
