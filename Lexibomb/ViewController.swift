@@ -379,6 +379,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         if valid {
+            valid = currentWord.count > 0
+        }
+        
+        if valid {
             // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
             // and then check that it is a valid dictionary word
             valid = currentWordLexigraphical()
@@ -394,8 +398,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func currentWordLexigraphical() -> Bool {
-        let word = join("", currentWord.map { $0.tile.display.lowercaseString })
         
+        var current = [currentWord[0].tile]
+        if let orientation = currentWordOrientation {
+            current = contiguousTiles(currentWord[0].tile, orientation:orientation)
+        }
+        
+        let word = join("", current.map { $0.display.lowercaseString })
+        NSLog("word: %@", word)
         let range = NSRange(location:0, length:currentWord.count)
         let nonlex = UITextChecker().rangeOfMisspelledWordInString(word,
                                                              range:range,
