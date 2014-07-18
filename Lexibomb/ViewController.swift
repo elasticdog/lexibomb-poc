@@ -349,6 +349,68 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return valid
     }
 
+    func wordLexigraphical(tiles: [Tile]) -> Bool {
+        let word = join("", tiles.map { $0.display.lowercaseString })
+        NSLog("word: %@", word)
+        let range = NSRange(location: 0, length: tiles.count)
+        let nonlex = UITextChecker().rangeOfMisspelledWordInString(word,
+                                                             range:range,
+                                                        startingAt:0,
+                                                              wrap:false,
+                                                          language:"en_US")
+        return nonlex.location == NSNotFound
+    }
+
+    func checkSpelling() -> Bool {
+        var valid = true
+        var word = [Tile]()
+
+        if currentWord.count == 0 {
+            valid = false
+        } else if currentWord.count == 1 {
+            word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Horizontal)
+            if word.count > 1 {
+                valid = wordLexigraphical(word)
+            }
+
+            if valid {
+                word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Vertical)
+                if word.count > 1 {
+                    valid = wordLexigraphical(word)
+                }
+            }
+        } else if currentWord.count > 1 {
+            if let orientation = currentWordOrientation {
+                word = contiguousTiles(currentWord[0].tile, orientation: orientation)
+                if word.count > 1 {
+                    valid = wordLexigraphical(word)
+                }
+
+                if valid {
+                    var oppositeOrientation = WordOrientation.Vertical
+                    if orientation == WordOrientation.Vertical {
+                        oppositeOrientation = WordOrientation.Horizontal
+                    }
+
+                    var currentWordTiles = currentWord.map { $0.tile }
+                    for tile in currentWordTiles {
+                        word = contiguousTiles(tile, orientation: oppositeOrientation)
+                        if word.count > 1 {
+                            valid = wordLexigraphical(word)
+                            if !valid {
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            valid = false
+        }
+
+        return valid
+    }
+
     func checkPlay() {
         var valid = false
 
@@ -360,7 +422,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 }
             }
         } else {
-            valid = true
+            if currentWord.count == 1 {
+                valid = false
+            } else {
+                valid = true
+            }
         }
 
         if valid {
@@ -379,42 +445,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         if valid {
-            valid = currentWord.count > 0
-        }
-        
-        if valid {
-            // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
-            // and then check that it is a valid dictionary word
-            valid = currentWordLexigraphical()
-        }
-
-        if valid {
-            // go through each letter in currentWord[]
-            // and grab the contiguous word along the opposite of currentWordOrientation;
-            // if the contiguous word has a length > 1, then check that it's a valid dictionary word
+            valid = checkSpelling()
         }
 
         playButton!.enabled = valid
     }
 
-    func currentWordLexigraphical() -> Bool {
-        
-        var current = [currentWord[0].tile]
-        if let orientation = currentWordOrientation {
-            current = contiguousTiles(currentWord[0].tile, orientation:orientation)
-        }
-        
-        let word = join("", current.map { $0.display.lowercaseString })
-        NSLog("word: %@", word)
-        let range = NSRange(location:0, length:currentWord.count)
-        let nonlex = UITextChecker().rangeOfMisspelledWordInString(word,
-                                                             range:range,
-                                                        startingAt:0,
-                                                              wrap:false,
-                                                          language:"en_US")
-        return nonlex.location == NSNotFound
-    }
-    
     func tilePlayed(tile:Tile) -> Bool {
         var result = false
 
