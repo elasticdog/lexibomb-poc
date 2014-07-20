@@ -74,8 +74,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var letterBar: UISegmentedControl?
     var playButton: UIButton!
     var letters = [String]()
-    var columnCount = 6
-    var rowCount = 10
+    var letterScores = [String:Int]()
+    var columnCount = 15
+    var rowCount = 15
     var tiles = [Tile]()
     var firstPlay = true
 
@@ -86,10 +87,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 playButton = view.viewWithTag(kPlayButtonTag) as? UIButton
 
                 if let control = letterBar {
-                    for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
-                        letters.append( String(character) )
-                    }
-
                     for segment in 0..<control.numberOfSegments {
                         control.setTitle( takeLetter(), forSegmentAtIndex: segment )
                     }
@@ -105,10 +102,39 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     init(coder aDecoder: NSCoder!)  {
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            columnCount = 15
-            rowCount = 15
+        for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
+            letters.append( String(character) )
         }
+
+        letterScores = [
+            "A": 1,
+            "B": 3,
+            "C": 3,
+            "D": 2,
+            "E": 1,
+            "F": 4,
+            "G": 2,
+            "H": 4,
+            "I": 1,
+            "J": 8,
+            "K": 5,
+            "L": 1,
+            "M": 3,
+            "N": 1,
+            "O": 1,
+            "P": 3,
+            "Q": 10,
+            "R": 1,
+            "S": 1,
+            "T": 1,
+            "U": 1,
+            "V": 4,
+            "W": 4,
+            "X": 8,
+            "Y": 4,
+            "Z": 10,
+            "_": 0,
+        ]
 
         super.init(coder: aDecoder)
     }
@@ -142,7 +168,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
-        if tile.letter? && tilePlayed(tile) {
+        if tilePlayed(tile) {
             cell.backgroundColor = letterTileColor
         } else if tile.letter? {
             cell.backgroundColor = UIColor.grayColor()
@@ -461,6 +487,109 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         playButton!.enabled = valid
+
+        if valid {
+            scorePlay()
+        }
+    }
+
+    func scoreTile(tile: Tile) -> (Int, Int) {
+        var letterScore = 0
+        var wordMultiplier = 1
+        let display = tile.display
+
+        if tilePlayed(tile) {
+            letterScore = letterScores[display]!
+        } else {
+            switch tile.value! {
+            case "0":
+                letterScore = letterScores[display]!
+            case "1":
+                letterScore = letterScores[display]! * 2
+            case "2":
+                letterScore = letterScores[display]! * 3
+            case "3":
+                letterScore = letterScores[display]!
+                wordMultiplier = 2
+            case "4":
+                letterScore = letterScores[display]!
+                wordMultiplier = 3
+            case "5":
+                letterScore = letterScores[display]! * 2
+                wordMultiplier = 2
+            case "6":
+                letterScore = letterScores[display]! * 3
+                wordMultiplier = 2
+            case "7":
+                letterScore = letterScores[display]! * 3
+            default:
+                letterScore = 0
+                wordMultiplier = 0
+            }
+        }
+
+        println("rawLetterScore: \(letterScores[display]!) letterScore: \(letterScore) wordMultiplier: \(wordMultiplier)")
+        return (letterScore, wordMultiplier)
+    }
+
+    func scorePlay() -> Int {
+        var score = 0
+        var playMultiplier = 1
+
+        var word = [Tile]()
+
+        if currentWord.count == 1 {
+            word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Horizontal)
+            if word.count > 1 {
+                for tile in word {
+                    let (letterScore, wordMultiplier) = scoreTile(tile)
+                    score += letterScore
+                    playMultiplier *= wordMultiplier
+                }
+            }
+
+            word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Vertical)
+            if word.count > 1 {
+                for tile in word {
+                    let (letterScore, wordMultiplier) = scoreTile(tile)
+                    score += letterScore
+                    playMultiplier *= wordMultiplier
+                }
+            }
+        } else if currentWord.count > 1 {
+            if let orientation = currentWordOrientation {
+                word = contiguousTiles(currentWord[0].tile, orientation: orientation)
+                if word.count > 1 {
+                    for tile in word {
+                        let (letterScore, wordMultiplier) = scoreTile(tile)
+                        score += letterScore
+                        playMultiplier *= wordMultiplier
+                    }
+                }
+
+                var oppositeOrientation = WordOrientation.Vertical
+                if orientation == WordOrientation.Vertical {
+                    oppositeOrientation = WordOrientation.Horizontal
+                }
+
+                var currentWordTiles = currentWord.map { $0.tile }
+                for tile in currentWordTiles {
+                    word = contiguousTiles(tile, orientation: oppositeOrientation)
+                    if word.count > 1 {
+                        for tile in word {
+                            let (letterScore, wordMultiplier) = scoreTile(tile)
+                            score += letterScore
+                            playMultiplier *= wordMultiplier
+                        }
+                    }
+                }
+            }
+        }
+
+        println("score: \(score) * \(playMultiplier) = \(score * playMultiplier)")
+        score = score * playMultiplier
+
+        return score * playMultiplier
     }
 
     func tilePlayed(tile:Tile) -> Bool {
