@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6185.7" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WG3-aH-VcG">
     <dependencies>
+        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6181.2"/>
     </dependencies>
     <scenes>
@@ -14,7 +15,7 @@
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="4" id="qPz-fJ-bWN">
                             <size key="itemSize" width="46" height="46"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="44"/>
+                            <size key="footerReferenceSize" width="0.0" height="80"/>
                             <inset key="sectionInset" minX="4" minY="4" maxX="4" maxY="4"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -55,8 +56,8 @@
                             <rect key="frame" x="0.0" y="50" width="480" height="44"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <segmentedControl opaque="NO" tag="1002" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP" userLabel="Letters">
-                                    <rect key="frame" x="20" y="6" width="395" height="29"/>
+                                <segmentedControl opaque="NO" tag="2001" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP" userLabel="Letters">
+                                    <rect key="frame" x="54" y="8" width="361" height="29"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <segments>
                                         <segment title="First"/>
@@ -67,22 +68,51 @@
                                         <segment title="Sixth"/>
                                         <segment title="Seventh"/>
                                     </segments>
-                                    <color key="tintColor" red="0.28450045620437958" green="0.92064895072992692" blue="0.1074073389172554" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
+                                </segmentedControl>
+                                <segmentedControl opaque="NO" tag="2002" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XLl-yN-YA9" userLabel="Letters">
+                                    <rect key="frame" x="54" y="44" width="361" height="29"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <segments>
+                                        <segment title="First"/>
+                                        <segment title="Second"/>
+                                        <segment title="Third"/>
+                                        <segment title="Fourth"/>
+                                        <segment title="Fifth"/>
+                                        <segment title="Sixth"/>
+                                        <segment title="Seventh"/>
+                                    </segments>
+                                    <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </segmentedControl>
                                 <button opaque="NO" tag="1003" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
-                                    <rect key="frame" x="429" y="5" width="37" height="30"/>
+                                    <rect key="frame" x="429" y="25" width="37" height="30"/>
                                     <state key="normal" title="Play">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="S1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pit-oH-lEV" userLabel="P1">
+                                    <rect key="frame" x="5" y="11" width="42" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="S2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-th-4qW" userLabel="P2">
+                                    <rect key="frame" x="4" y="47" width="42" height="21"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
+                                <constraint firstAttribute="trailing" secondItem="XLl-yN-YA9" secondAttribute="trailing" constant="65" id="36s-2a-O3N"/>
+                                <constraint firstItem="XLl-yN-YA9" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="54" id="3OQ-hW-KIQ"/>
                                 <constraint firstAttribute="trailing" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="65" id="CCi-gM-DIr"/>
-                                <constraint firstItem="t4b-f3-ovP" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="20" symbolic="YES" id="Nbz-kv-kG5"/>
-                                <constraint firstAttribute="bottom" secondItem="L2k-Cc-gu6" secondAttribute="bottom" constant="9" id="RPh-df-Af6"/>
+                                <constraint firstItem="t4b-f3-ovP" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="54" id="Nbz-kv-kG5"/>
+                                <constraint firstAttribute="bottom" secondItem="L2k-Cc-gu6" secondAttribute="bottom" constant="25" id="RPh-df-Af6"/>
                                 <constraint firstItem="L2k-Cc-gu6" firstAttribute="leading" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="14" id="XKR-Ip-sGP"/>
                                 <constraint firstAttribute="trailing" secondItem="L2k-Cc-gu6" secondAttribute="trailing" constant="14" id="pO0-fO-4KE"/>
-                                <constraint firstAttribute="centerY" secondItem="t4b-f3-ovP" secondAttribute="centerY" constant="2" id="qu5-dE-9hb"/>
+                                <constraint firstAttribute="centerY" secondItem="t4b-f3-ovP" secondAttribute="centerY" constant="18" id="qu5-dE-9hb"/>
                             </constraints>
                         </collectionReusableView>
                         <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">

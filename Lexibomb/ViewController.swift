@@ -10,6 +10,18 @@ import UIKit
 
 let daBomb = "💣"
 
+let kTileLabelTag = 1001
+let kTileImageTag = 1005
+
+let kPlayButtonTag = 1003
+
+let kPlayerOneRackTag = 2001
+let kPlayerTwoRackTag = 2002
+
+let kPlayerOneScoreTag = 3001
+let kPlayerTwoScoreTag = 3002
+
+
 @infix func +(left:ViewController.Point, right:ViewController.Point) -> ViewController.Point {
     return ViewController.Point(x:left.x + right.x, y:left.y + right.y)
 }
@@ -70,8 +82,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
-                letterBar = view.viewWithTag(1002) as? UISegmentedControl
-                playButton = view.viewWithTag(1003) as? UIButton
+                letterBar = view.viewWithTag(kPlayerOneRackTag) as? UISegmentedControl
+                playButton = view.viewWithTag(kPlayButtonTag) as? UIButton
 
                 if let control = letterBar {
                     for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
@@ -117,7 +129,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         cell.backgroundColor = defaultColor
 
         var tile = self.tiles[indexPath.row]
-        var background = cell.viewWithTag(1005) as UIImageView
+        var background = cell.viewWithTag(kTileImageTag) as UIImageView
         background.image = nil
         background.alpha = 0.7
         background.transform = CGAffineTransformMakeScale(1.2, 1.2)
@@ -140,7 +152,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             cell.backgroundColor = UIColor.redColor()
         }
 
-        var label = cell.viewWithTag(1001) as UILabel
+        var label = cell.viewWithTag(kTileLabelTag) as UILabel
         label.text = tile.display
 
         return cell
