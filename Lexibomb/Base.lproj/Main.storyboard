@@ -62,8 +62,8 @@
                             <rect key="frame" x="0.0" y="54" width="600" height="80"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
-                                <segmentedControl opaque="NO" tag="2001" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP" userLabel="Letters">
-                                    <rect key="frame" x="54" y="8" width="361" height="29"/>
+                                <segmentedControl opaque="NO" tag="2001" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="t4b-f3-ovP" userLabel="Letters">
+                                    <rect key="frame" x="54" y="8" width="481" height="29"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <segments>
                                         <segment title="First"/>
@@ -76,8 +76,8 @@
                                     </segments>
                                     <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </segmentedControl>
-                                <segmentedControl opaque="NO" tag="2002" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XLl-yN-YA9" userLabel="Letters">
-                                    <rect key="frame" x="54" y="44" width="361" height="29"/>
+                                <segmentedControl opaque="NO" tag="2002" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XLl-yN-YA9" userLabel="Letters">
+                                    <rect key="frame" x="54" y="44" width="481" height="29"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <segments>
                                         <segment title="First"/>
@@ -90,20 +90,23 @@
                                     </segments>
                                     <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </segmentedControl>
-                                <button opaque="NO" tag="1003" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
-                                    <rect key="frame" x="429" y="25" width="37" height="30"/>
+                                <button opaque="NO" tag="1003" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
+                                    <rect key="frame" x="549" y="25" width="37" height="30"/>
                                     <state key="normal" title="Play">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
                                 </button>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="S1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pit-oH-lEV" userLabel="P1">
-                                    <rect key="frame" x="5" y="11" width="42" height="21"/>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="S2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-th-4qW" userLabel="P2">
+                                    <rect key="frame" x="20" y="47" width="21" height="21"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="21" id="owy-7F-6J8"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3002" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="S2" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gcd-th-4qW" userLabel="P2">
-                                    <rect key="frame" x="4" y="47" width="42" height="21"/>
+                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="S1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pit-oH-lEV" userLabel="P1">
+                                    <rect key="frame" x="20" y="11" width="21" height="20.5"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
@@ -113,12 +116,17 @@
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="XLl-yN-YA9" secondAttribute="trailing" constant="65" id="36s-2a-O3N"/>
                                 <constraint firstItem="XLl-yN-YA9" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="54" id="3OQ-hW-KIQ"/>
+                                <constraint firstItem="XLl-yN-YA9" firstAttribute="leading" secondItem="gcd-th-4qW" secondAttribute="trailing" constant="13" id="5sq-Ls-ZWI"/>
+                                <constraint firstAttribute="bottom" secondItem="gcd-th-4qW" secondAttribute="bottom" constant="12" id="9X4-rH-TeR"/>
                                 <constraint firstAttribute="trailing" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="65" id="CCi-gM-DIr"/>
+                                <constraint firstItem="XLl-yN-YA9" firstAttribute="top" secondItem="t4b-f3-ovP" secondAttribute="bottom" constant="8" symbolic="YES" id="EM2-lm-W2d"/>
                                 <constraint firstItem="t4b-f3-ovP" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="54" id="Nbz-kv-kG5"/>
                                 <constraint firstAttribute="bottom" secondItem="L2k-Cc-gu6" secondAttribute="bottom" constant="25" id="RPh-df-Af6"/>
                                 <constraint firstItem="L2k-Cc-gu6" firstAttribute="leading" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="14" id="XKR-Ip-sGP"/>
                                 <constraint firstAttribute="trailing" secondItem="L2k-Cc-gu6" secondAttribute="trailing" constant="14" id="pO0-fO-4KE"/>
                                 <constraint firstAttribute="centerY" secondItem="t4b-f3-ovP" secondAttribute="centerY" constant="18" id="qu5-dE-9hb"/>
+                                <constraint firstItem="gcd-th-4qW" firstAttribute="top" secondItem="Pit-oH-lEV" secondAttribute="bottom" constant="15" id="tbi-NT-pj1"/>
+                                <constraint firstItem="gcd-th-4qW" firstAttribute="leading" secondItem="Pit-oH-lEV" secondAttribute="leading" id="ziQ-h8-qrw"/>
                             </constraints>
                         </collectionReusableView>
                         <variation key="heightClass=regular-widthClass=compact" ambiguous="YES">
