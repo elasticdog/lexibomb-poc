@@ -11,6 +11,7 @@ import UIKit
 let daBomb = "💣"
 
 let TileLabelTag = 1001
+let TileScoreTag = 1002
 let TileImageTag = 1005
 
 let PlayButtonTag = 1003
@@ -179,7 +180,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var label = cell.viewWithTag(TileLabelTag) as UILabel
         label.text = tile.letter
-
+        
+        var scoreLabel = cell.viewWithTag(TileScoreTag) as UILabel
+        
+        var scoreText = ""
+        if let letter = tile.letter {
+            scoreText = String(letterPoints[letter]!)
+        }
+        
+        scoreLabel.text = scoreText
+        
         return cell
     }
 
