@@ -70,6 +70,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var currentPlayOrientation: Orientation?
     var rack: UISegmentedControl?
     var playButton: UIButton!
+    var scoreLabel: UILabel!
     var letterBag = [String]()
     var letterPoints = [String: Int]()
     var columnCount = 15
@@ -82,6 +83,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if let view = footer {
                 rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
                 playButton = view.viewWithTag(PlayButtonTag) as? UIButton
+                scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
 
                 if let control = rack {
                     for segment in 0..<control.numberOfSegments {
@@ -144,6 +146,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return true
     }
 
+    // MARK: - NSCollectionViewDataSource
+    
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.cornerRadius = 8
@@ -183,6 +187,24 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return self.tiles.count
     }
 
+    override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
+        var result: UICollectionReusableView? = nil
+        
+        if kind == UICollectionElementKindSectionFooter {
+            if !footer {
+                footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
+                footer!.backgroundColor = UIColor.whiteColor();
+                footer!.layer.cornerRadius = 1
+                rack!.tintColor = letterTileColor;
+            }
+            result = self.footer
+        }
+        
+        return result
+    }
+
+    // MARK: - NSCollectionViewDelegate
+    
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         var tile = tiles[indexPath.row]
 
@@ -215,22 +237,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         self.collectionView.reloadData()
         checkPlay()
     }
-
-    override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
-        var result: UICollectionReusableView? = nil
-
-        if kind == UICollectionElementKindSectionFooter {
-            if !footer {
-                footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
-                footer!.backgroundColor = UIColor.whiteColor();
-                footer!.layer.cornerRadius = 1
-                rack!.tintColor = letterTileColor;
-            }
-            result = self.footer
-        }
-
-        return result
-    }
+    
+    // MARK: - UIResponder
 
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
         if (motion == UIEventSubtype.MotionShake) {
@@ -243,6 +251,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         self.collectionView.reloadData()
     }
 
+    // MARK: - Private
+    
     func tileInCurrentPlay(tile: Tile) -> Bool {
         var contained = false
         for move in currentPlay {
@@ -613,7 +623,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         for move in currentPlay {
             updateTileAt(coordinateForTile(move.tile)!)
         }
-        scorePlay()
+        scoreLabel.text = "\(scorePlay())"
         currentPlay.removeAll()
         collectionView.reloadData()
 
