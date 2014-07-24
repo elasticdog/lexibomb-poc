@@ -147,7 +147,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     // MARK: - NSCollectionViewDataSource
-    
+
     override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.cornerRadius = 8
@@ -189,7 +189,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
         var result: UICollectionReusableView? = nil
-        
+
         if kind == UICollectionElementKindSectionFooter {
             if !footer {
                 footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
@@ -199,12 +199,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
             result = self.footer
         }
-        
+
         return result
     }
 
     // MARK: - NSCollectionViewDelegate
-    
+
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         var tile = tiles[indexPath.row]
 
@@ -237,7 +237,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         self.collectionView.reloadData()
         checkPlay()
     }
-    
+
     // MARK: - UIResponder
 
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
@@ -252,7 +252,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     // MARK: - Private
-    
+
     func tileInCurrentPlay(tile: Tile) -> Bool {
         var contained = false
         for move in currentPlay {
@@ -584,7 +584,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         println("score: \(score) * \(playMultiplier) = \(score * playMultiplier)")
         score = score * playMultiplier
 
-        return score * playMultiplier
+        return score
     }
 
     func tilePlayed(tile: Tile) -> Bool {
@@ -623,7 +623,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         for move in currentPlay {
             updateTileAt(coordinateForTile(move.tile)!)
         }
-        scoreLabel.text = "\(scorePlay())"
+
+        if let previousScore = scoreLabel.text.toInt() {
+            scoreLabel.text = "\(scorePlay() + previousScore)"
+        } else {
+            scoreLabel.text = "\(scorePlay())"
+        }
+
         currentPlay.removeAll()
         collectionView.reloadData()
 
