@@ -475,10 +475,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         playButton!.enabled = valid
-
-        if valid {
-            scorePlay()
-        }
     }
 
     func scoreTile(tile: Tile) -> (Int, Int) {
@@ -617,6 +613,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         for move in currentPlay {
             updateTileAt(coordinateForTile(move.tile)!)
         }
+        scorePlay()
         currentPlay.removeAll()
         collectionView.reloadData()
 
