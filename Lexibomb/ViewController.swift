@@ -10,71 +10,69 @@ import UIKit
 
 let daBomb = "💣"
 
-let kTileLabelTag = 1001
-let kTileImageTag = 1005
+let TileLabelTag = 1001
+let TileImageTag = 1005
 
-let kPlayButtonTag = 1003
+let PlayButtonTag = 1003
 
-let kPlayerOneRackTag = 2001
-let kPlayerTwoRackTag = 2002
+let PlayerOneRackTag = 2001
+let PlayerTwoRackTag = 2002
 
-let kPlayerOneScoreTag = 3001
-let kPlayerTwoScoreTag = 3002
+let PlayerOneScoreTag = 3001
+let PlayerTwoScoreTag = 3002
 
-
-@infix func +(left:ViewController.Point, right:ViewController.Point) -> ViewController.Point {
-    return ViewController.Point(x:left.x + right.x, y:left.y + right.y)
+@infix func +(left: ViewController.Coordinate, right: ViewController.Coordinate) -> ViewController.Coordinate {
+    return ViewController.Coordinate(x: left.x + right.x, y: left.y + right.y)
 }
 
-@infix func ==(left:ViewController.Point, right:ViewController.Point) -> Bool {
-    return left.x == right.x &&  left.y == right.y
+@infix func ==(left: ViewController.Coordinate, right: ViewController.Coordinate) -> Bool {
+    return left.x == right.x && left.y == right.y
 }
 
 class ViewController: UICollectionViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-
-    enum WordOrientation {
+    enum Orientation {
         case Horizontal
         case Vertical
     }
 
-    struct Point : Printable, Equatable {
-        let x:Int
-        let y:Int
-        var description:String {
+    struct Coordinate: Printable, Equatable {
+        let x: Int
+        let y: Int
+        var description: String {
             get {
                 return String("(\(x), \(y))")
             }
         }
     }
 
-    class Tile : Printable {
-        var uid:Int?
-        var display:String = ""
-        var value:String?
-        var letter:String?
-        var description:String {
+    class Tile: Printable {
+        var uid: Int?
+        var display: String = ""
+        var bombValue: String?
+        var letter: String?
+        var description: String {
             get {
-                return String("\(display) \(value) \(uid)")
+                return String("\(display) \(bombValue) \(uid)")
             }
         }
     }
 
-    struct Play {
-        let tile:Tile
-        let barIndex:Int
+    struct Move {
+        let tile: Tile
+        let rackIndex: Int
     }
 
-    let defaultColor = UIColor(red:0.25, green:0.4, blue:0.3, alpha:1.0)
-    let letterTileColor = UIColor(red:0.40, green:0.55, blue:0.65, alpha:1.0)
-    let names = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
+    let defaultColor = UIColor(red: 0.25, green: 0.4, blue: 0.3, alpha: 1.0)
+    let letterTileColor = UIColor(red: 0.40, green: 0.55, blue: 0.65, alpha: 1.0)
+    let multiplierNames = ["", "Double", "Triple", "DoubleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord", "TripleWord" ]
 
     var bombCount = 22
-    var currentWord = [Play]()
-    var currentWordOrientation:WordOrientation?
-    var letterBar: UISegmentedControl?
+    var currentPlay = [Move]()
+    var currentPlayOrientation: Orientation?
+    var rack: UISegmentedControl?
     var playButton: UIButton!
-    var letters = [String]()
-    var letterScores = [String:Int]()
+    var letterBag = [String]()
+    var letterPoints = [String: Int]()
     var columnCount = 15
     var rowCount = 15
     var tiles = [Tile]()
@@ -83,19 +81,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
-                letterBar = view.viewWithTag(kPlayerOneRackTag) as? UISegmentedControl
-                playButton = view.viewWithTag(kPlayButtonTag) as? UIButton
+                rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
+                playButton = view.viewWithTag(PlayButtonTag) as? UIButton
 
-                if let control = letterBar {
+                if let control = rack {
                     for segment in 0..<control.numberOfSegments {
-                        control.setTitle( takeLetter(), forSegmentAtIndex: segment )
+                        control.setTitle(takeLetter(), forSegmentAtIndex: segment)
                     }
-
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
 
                 if let button = playButton {
-                    button.addTarget(self, action:"playPressed", forControlEvents:.TouchUpInside)
+                    button.addTarget(self, action: "playButtonPressed", forControlEvents: .TouchUpInside)
                 }
             }
         }
@@ -103,10 +100,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     init(coder aDecoder: NSCoder!)  {
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
-            letters.append( String(character) )
+            letterBag.append(String(character))
         }
 
-        letterScores = [
+        letterPoints = [
             "A": 1,
             "B": 3,
             "C": 3,
@@ -141,7 +138,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         placeBombs()
     }
 
@@ -155,16 +151,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         cell.backgroundColor = defaultColor
 
         var tile = self.tiles[indexPath.row]
-        var background = cell.viewWithTag(kTileImageTag) as UIImageView
+        var background = cell.viewWithTag(TileImageTag) as UIImageView
         background.image = nil
         background.alpha = 0.7
         background.transform = CGAffineTransformMakeScale(1.2, 1.2)
 
-        if let value = tile.value?.toInt()? {
+        if let bombValue = tile.bombValue?.toInt()? {
             cell.backgroundColor = UIColor.whiteColor()
 
-            if value > 0 {
-                background.image = UIImage(named:names[value])
+            if bombValue > 0 {
+                background.image = UIImage(named: multiplierNames[bombValue])
             }
         }
 
@@ -174,11 +170,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             cell.backgroundColor = UIColor.grayColor()
         }
 
-        if tile.value == daBomb && tilePlayed(tile) {
+        if tile.bombValue == daBomb && tilePlayed(tile) {
             cell.backgroundColor = UIColor.redColor()
         }
 
-        var label = cell.viewWithTag(kTileLabelTag) as UILabel
+        var label = cell.viewWithTag(TileLabelTag) as UILabel
         label.text = tile.display
 
         return cell
@@ -192,10 +188,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var tile = tiles[indexPath.row]
 
         if tile.letter {
-            if let play = takePlayForTile(tile) {
-                letterBar!.setTitle(play.tile.letter, forSegmentAtIndex:play.barIndex)
-                letterBar!.selectedSegmentIndex = play.barIndex
-                letterBar!.setEnabled(true, forSegmentAtIndex: play.barIndex)
+            if let move = moveForTile(tile) {
+                rack!.setTitle(move.tile.letter, forSegmentAtIndex: move.rackIndex)
+                rack!.selectedSegmentIndex = move.rackIndex
+                rack!.setEnabled(true, forSegmentAtIndex: move.rackIndex)
 
                 tile.letter = nil
                 tile.display = ""
@@ -205,36 +201,34 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             return;
         }
 
-        var selectedSegmentIndex = letterBar!.selectedSegmentIndex
+        var selectedSegmentIndex = rack!.selectedSegmentIndex
         if selectedSegmentIndex == UISegmentedControlNoSegment {
             println("Tile: \(tile)")
             return
         }
 
-        tile.letter = letterBar!.titleForSegmentAtIndex(selectedSegmentIndex)
+        tile.letter = rack!.titleForSegmentAtIndex(selectedSegmentIndex)
         tile.display = String(tile.letter!)
-        letterBar!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
-        letterBar!.selectedSegmentIndex = UISegmentedControlNoSegment
-        letterBar!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
+        rack!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
+        rack!.selectedSegmentIndex = UISegmentedControlNoSegment
+        rack!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
 
-        currentWord.append(Play(tile:tile, barIndex:selectedSegmentIndex))
+        currentPlay.append(Move(tile: tile, rackIndex: selectedSegmentIndex))
 
         self.collectionView.reloadData()
         checkPlay()
     }
 
     override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
-        var result:UICollectionReusableView? = nil
+        var result: UICollectionReusableView? = nil
 
         if kind == UICollectionElementKindSectionFooter {
-
             if !footer {
                 footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
                 footer!.backgroundColor = UIColor.whiteColor();
                 footer!.layer.cornerRadius = 1
-                letterBar!.tintColor = letterTileColor;
+                rack!.tintColor = letterTileColor;
             }
-
             result = self.footer
         }
 
@@ -244,9 +238,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
         if (motion == UIEventSubtype.MotionShake) {
             for index in 0..<self.columnCount * self.rowCount {
-                var point = pointForIndex(index)
+                var coordinate = coordinateForIndex(index)
                 var tile = tiles[index]
-                updateTileAt(point)
+                updateTileAt(coordinate)
             }
         }
         self.collectionView.reloadData()
@@ -254,8 +248,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func tileInCurrentWord(tile: Tile) -> Bool {
         var contained = false
-        for play in currentWord {
-            if play.tile === tile {
+        for move in currentPlay {
+            if move.tile === tile {
                 contained = true
                 break
             }
@@ -264,24 +258,24 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func hasAdjacentTile(tile: Tile) -> Bool {
-        var aroundTiles = [Tile]()
-        let tilePoint = pointForTile(tile)!
+        let coordinate = coordinateForTile(tile)!
 
-        if let left = tileAtPoint(tilePoint + Point(x:-1, y:0)) {
-            aroundTiles += left
+        var adjacentTiles = [Tile]()
+        if let left = tileAtCoordinate(coordinate + Coordinate(x: -1, y: 0)) {
+            adjacentTiles += left
         }
-        if let right = tileAtPoint(tilePoint + Point(x:1, y:0)) {
-            aroundTiles += right
+        if let right = tileAtCoordinate(coordinate + Coordinate(x: 1, y: 0)) {
+            adjacentTiles += right
         }
-        if let above = tileAtPoint(tilePoint + Point(x:0, y:-1)) {
-            aroundTiles += above
+        if let above = tileAtCoordinate(coordinate + Coordinate(x: 0, y: -1)) {
+            adjacentTiles += above
         }
-        if let below = tileAtPoint(tilePoint + Point(x:0, y:1)) {
-            aroundTiles += below
+        if let below = tileAtCoordinate(coordinate + Coordinate(x: 0, y: 1)) {
+            adjacentTiles += below
         }
 
         var adjacent = false
-        for tile in aroundTiles {
+        for tile in adjacentTiles {
             if tile.display != "" && !tileInCurrentWord(tile) {
                 adjacent = true
                 break
@@ -294,33 +288,33 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func isCurrentWordOriented() -> Bool {
         var oriented = true
 
-        if currentWord.count <= 1 {
-            currentWordOrientation = nil
+        if currentPlay.count <= 1 {
+            currentPlayOrientation = nil
         } else {
-            var startingPoint = pointForTile(currentWord[0].tile)!
+            var startingCoordinate = coordinateForTile(currentPlay[0].tile)!
 
-            for play in currentWord[1..<currentWord.count] {
-                var tilePoint = pointForTile(play.tile)!
+            for move in currentPlay[1..<currentPlay.count] {
+                var tileCoordinate = coordinateForTile(move.tile)!
 
-                if let orientation = currentWordOrientation {
-                    if orientation == WordOrientation.Horizontal {
-                        if tilePoint.y != startingPoint.y {
+                if let orientation = currentPlayOrientation {
+                    if orientation == Orientation.Horizontal {
+                        if tileCoordinate.y != startingCoordinate.y {
                             oriented = false
-                            currentWordOrientation = nil
+                            currentPlayOrientation = nil
                             break
                         }
-                    } else if orientation == WordOrientation.Vertical {
-                        if tilePoint.x != startingPoint.x {
+                    } else if orientation == Orientation.Vertical {
+                        if tileCoordinate.x != startingCoordinate.x {
                             oriented = false
-                            currentWordOrientation = nil
+                            currentPlayOrientation = nil
                             break
                         }
                     }
                 } else {
-                    if tilePoint.y == startingPoint.y {
-                        currentWordOrientation = WordOrientation.Horizontal
-                    } else if tilePoint.x == startingPoint.x {
-                        currentWordOrientation = WordOrientation.Vertical
+                    if tileCoordinate.y == startingCoordinate.y {
+                        currentPlayOrientation = Orientation.Horizontal
+                    } else if tileCoordinate.x == startingCoordinate.x {
+                        currentPlayOrientation = Orientation.Vertical
                     } else {
                         oriented = false
                         break
@@ -332,18 +326,18 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return oriented
     }
 
-    func contiguousTiles(startingTile: Tile, orientation: WordOrientation) -> [Tile] {
-        var decrement = Point(x:-1, y:0)
-        var increment = Point(x:1, y:0)
+    func contiguousTiles(startingTile: Tile, orientation: Orientation) -> [Tile] {
+        var decrement = Coordinate(x: -1, y: 0)
+        var increment = Coordinate(x: 1, y: 0)
 
-        if orientation == WordOrientation.Vertical {
-            decrement = Point(x:0, y:-1)
-            increment = Point(x:0, y:1)
+        if orientation == Orientation.Vertical {
+            decrement = Coordinate(x: 0, y: -1)
+            increment = Coordinate(x: 0, y: 1)
         }
 
         var begin = startingTile
         while begin.letter {
-            if let previousTile = tileAtPoint(pointForTile(begin)! + decrement) {
+            if let previousTile = tileAtCoordinate(coordinateForTile(begin)! + decrement) {
                 if !previousTile.letter {
                     break
                 } else {
@@ -354,7 +348,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var end = startingTile
         while end.letter {
-            if let nextTile = tileAtPoint(pointForTile(end)! + increment) {
+            if let nextTile = tileAtCoordinate(coordinateForTile(end)! + increment) {
                 if !nextTile.letter {
                     break
                 } else {
@@ -366,19 +360,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var tiles = [Tile]()
         while begin !== end {
             tiles.append(begin)
-            begin = tileAtPoint(pointForTile(begin)! + increment)!
+            begin = tileAtCoordinate(coordinateForTile(begin)! + increment)!
         }
         tiles.append(begin)
 
         return tiles
     }
 
-    func wordContainsAllPlays(word: [Tile]) -> Bool {
+    func wordContainsAllMoves(word: [Tile]) -> Bool {
         var valid = true
-        var currentWordTiles = currentWord.map { $0.tile }
+        var currentPlayTiles = currentPlay.map { $0.tile }
 
-        for tile in currentWordTiles {
-            if !contains(word, {$0 === tile}) {
+        for tile in currentPlayTiles {
+            if !contains(word, { $0 === tile }) {
                 valid = false
                 break
             }
@@ -391,11 +385,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let word = join("", tiles.map { $0.display.lowercaseString })
         NSLog("word: %@", word)
         let range = NSRange(location: 0, length: tiles.count)
-        let nonlex = UITextChecker().rangeOfMisspelledWordInString(word,
-                                                             range:range,
-                                                        startingAt:0,
-                                                              wrap:false,
-                                                          language:"en_US")
+        let nonlex = UITextChecker().rangeOfMisspelledWordInString(word, range: range, startingAt: 0, wrap: false, language: "en_US")
+
         return nonlex.location == NSNotFound
     }
 
@@ -403,35 +394,35 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var valid = true
         var word = [Tile]()
 
-        if currentWord.count == 0 {
+        if currentPlay.count == 0 {
             valid = false
-        } else if currentWord.count == 1 {
-            word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Horizontal)
+        } else if currentPlay.count == 1 {
+            word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Horizontal)
             if word.count > 1 {
                 valid = wordLexigraphical(word)
             }
 
             if valid {
-                word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Vertical)
+                word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Vertical)
                 if word.count > 1 {
                     valid = wordLexigraphical(word)
                 }
             }
-        } else if currentWord.count > 1 {
-            if let orientation = currentWordOrientation {
-                word = contiguousTiles(currentWord[0].tile, orientation: orientation)
+        } else if currentPlay.count > 1 {
+            if let orientation = currentPlayOrientation {
+                word = contiguousTiles(currentPlay[0].tile, orientation: orientation)
                 if word.count > 1 {
                     valid = wordLexigraphical(word)
                 }
 
                 if valid {
-                    var oppositeOrientation = WordOrientation.Vertical
-                    if orientation == WordOrientation.Vertical {
-                        oppositeOrientation = WordOrientation.Horizontal
+                    var oppositeOrientation = Orientation.Vertical
+                    if orientation == Orientation.Vertical {
+                        oppositeOrientation = Orientation.Horizontal
                     }
 
-                    var currentWordTiles = currentWord.map { $0.tile }
-                    for tile in currentWordTiles {
+                    var currentPlayTiles = currentPlay.map { $0.tile }
+                    for tile in currentPlayTiles {
                         word = contiguousTiles(tile, orientation: oppositeOrientation)
                         if word.count > 1 {
                             valid = wordLexigraphical(word)
@@ -453,14 +444,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var valid = false
 
         if !firstPlay {
-            for play in currentWord {
-                if hasAdjacentTile(play.tile) {
+            for move in currentPlay {
+                if hasAdjacentTile(move.tile) {
                     valid = true
                     break
                 }
             }
         } else {
-            if currentWord.count == 1 {
+            if currentPlay.count == 1 {
                 valid = false
             } else {
                 valid = true
@@ -468,17 +459,17 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         if valid {
-            // ensure that all of the tiles within currentWord[] are contained
+            // ensure that all of the tiles within currentPlay[] are contained
             // within a single row or a single column
             valid = isCurrentWordOriented()
         }
 
         if valid {
-            // grab the contiguous word starting at currentWord[0] along the currentWordOrientation
-            // and then check that all of the currentWord[] tiles are contained in it
-            if currentWord.count > 1 {
-                var wordTiles = contiguousTiles(currentWord[0].tile, orientation: currentWordOrientation!)
-                valid = wordContainsAllPlays(wordTiles)
+            // grab the contiguous word starting at currentPlay[0] along the currentPlayOrientation
+            // and then check that all of the currentPlay[] tiles are contained in it
+            if currentPlay.count > 1 {
+                var wordTiles = contiguousTiles(currentPlay[0].tile, orientation: currentPlayOrientation!)
+                valid = wordContainsAllMoves(wordTiles)
             }
         }
 
@@ -494,42 +485,42 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func scoreTile(tile: Tile) -> (Int, Int) {
-        var letterScore = 0
-        var wordMultiplier = 1
+        var score = 0
+        var multiplier = 1
         let display = tile.display
 
         if tilePlayed(tile) {
-            letterScore = letterScores[display]!
+            score = letterPoints[display]!
         } else {
-            switch tile.value! {
+            switch tile.bombValue! {
             case "0":
-                letterScore = letterScores[display]!
+                score = letterPoints[display]!
             case "1":
-                letterScore = letterScores[display]! * 2
+                score = letterPoints[display]! * 2
             case "2":
-                letterScore = letterScores[display]! * 3
+                score = letterPoints[display]! * 3
             case "3":
-                letterScore = letterScores[display]!
-                wordMultiplier = 2
+                score = letterPoints[display]!
+                multiplier = 2
             case "4":
-                letterScore = letterScores[display]!
-                wordMultiplier = 3
+                score = letterPoints[display]!
+                multiplier = 3
             case "5":
-                letterScore = letterScores[display]! * 2
-                wordMultiplier = 2
+                score = letterPoints[display]! * 2
+                multiplier = 2
             case "6":
-                letterScore = letterScores[display]! * 3
-                wordMultiplier = 2
+                score = letterPoints[display]! * 3
+                multiplier = 2
             case "7":
-                letterScore = letterScores[display]! * 3
+                score = letterPoints[display]! * 3
             default:
-                letterScore = 0
-                wordMultiplier = 0
+                score = 0
+                multiplier = 0
             }
         }
 
-        println("rawLetterScore: \(letterScores[display]!) letterScore: \(letterScore) wordMultiplier: \(wordMultiplier)")
-        return (letterScore, wordMultiplier)
+        println("Letter Points: \(letterPoints[display]!) Score: \(score) Multiplier: \(multiplier)")
+        return (score, multiplier)
     }
 
     func scorePlay() -> Int {
@@ -538,8 +529,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var word = [Tile]()
 
-        if currentWord.count == 1 {
-            word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Horizontal)
+        if currentPlay.count == 1 {
+            word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Horizontal)
             if word.count > 1 {
                 for tile in word {
                     let (letterScore, wordMultiplier) = scoreTile(tile)
@@ -548,7 +539,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 }
             }
 
-            word = contiguousTiles(currentWord[0].tile, orientation: WordOrientation.Vertical)
+            word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Vertical)
             if word.count > 1 {
                 for tile in word {
                     let (letterScore, wordMultiplier) = scoreTile(tile)
@@ -556,9 +547,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     playMultiplier *= wordMultiplier
                 }
             }
-        } else if currentWord.count > 1 {
-            if let orientation = currentWordOrientation {
-                word = contiguousTiles(currentWord[0].tile, orientation: orientation)
+        } else if currentPlay.count > 1 {
+            if let orientation = currentPlayOrientation {
+                word = contiguousTiles(currentPlay[0].tile, orientation: orientation)
                 if word.count > 1 {
                     for tile in word {
                         let (letterScore, wordMultiplier) = scoreTile(tile)
@@ -567,13 +558,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     }
                 }
 
-                var oppositeOrientation = WordOrientation.Vertical
-                if orientation == WordOrientation.Vertical {
-                    oppositeOrientation = WordOrientation.Horizontal
+                var oppositeOrientation = Orientation.Vertical
+                if orientation == Orientation.Vertical {
+                    oppositeOrientation = Orientation.Horizontal
                 }
 
-                var currentWordTiles = currentWord.map { $0.tile }
-                for tile in currentWordTiles {
+                var currentPlayTiles = currentPlay.map { $0.tile }
+                for tile in currentPlayTiles {
                     word = contiguousTiles(tile, orientation: oppositeOrientation)
                     if word.count > 1 {
                         for tile in word {
@@ -592,13 +583,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return score * playMultiplier
     }
 
-    func tilePlayed(tile:Tile) -> Bool {
+    func tilePlayed(tile: Tile) -> Bool {
         var result = false
 
         if tile.letter {
             result = true
-            for play in currentWord {
-                if play.tile.uid == tile.uid {
+            for move in currentPlay {
+                if move.tile.uid == tile.uid {
                     result = false
                     break
                 }
@@ -608,14 +599,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return result
     }
 
-    func takePlayForTile(tile:Tile) -> Play? {
-        var result:Play? = nil
+    func moveForTile(tile: Tile) -> Move? {
+        var result: Move? = nil
         var index = 0
 
-        for play in currentWord {
-            if play.tile.uid == tile.uid {
-                result = play
-                currentWord.removeAtIndex(index)
+        for move in currentPlay {
+            if move.tile.uid == tile.uid {
+                result = move
+                currentPlay.removeAtIndex(index)
                 break
             }
             index++
@@ -624,18 +615,17 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return result
     }
 
-    func playPressed() {
-
-        for play in currentWord {
-            updateTileAt(pointForTile(play.tile)!)
+    func playButtonPressed() {
+        for move in currentPlay {
+            updateTileAt(coordinateForTile(move.tile)!)
         }
-        currentWord.removeAll()
+        currentPlay.removeAll()
         collectionView.reloadData()
 
-        var bar = letterBar!
+        var bar = rack!
         for segment in 0..<bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
-                bar.setTitle( takeLetter(), forSegmentAtIndex: segment )
+                bar.setTitle(takeLetter(), forSegmentAtIndex: segment)
                 bar.setEnabled(true, forSegmentAtIndex: segment)
             }
         }
@@ -645,22 +635,22 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func takeLetter() -> String {
-        var location = Int(arc4random_uniform(UInt32(letters.count)))
-        var letter = letters[location]
+        var location = Int(arc4random_uniform(UInt32(letterBag.count)))
 
-        letters.removeAtIndex(location)
+        var letter = letterBag[location]
+        letterBag.removeAtIndex(location)
 
         return letter
     }
 
-    func pointForTile(tile:Tile) -> Point? {
+    func coordinateForTile(tile: Tile) -> Coordinate? {
         var index = 0
 
         for checkTile in tiles {
             if let uid = checkTile.uid {
                 if let tuid = tile.uid {
                     if uid == tuid {
-                        return pointForIndex(index)
+                        return coordinateForIndex(index)
                     }
                 }
             }
@@ -670,19 +660,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return nil
     }
 
-    func pointForIndex(index: Int) -> Point {
+    func coordinateForIndex(index: Int) -> Coordinate {
         var row = index / self.columnCount
         var column = index % self.columnCount
 
-        return Point(x: column, y: row)
+        return Coordinate(x: column, y: row)
     }
 
-    func pointForIndexPath(indexPath: NSIndexPath) -> Point {
-        return pointForIndex(indexPath.row)
+    func coordinateForIndexPath(indexPath: NSIndexPath) -> Coordinate {
+        return coordinateForIndex(indexPath.row)
     }
 
-    func tileAtPoint(point:Point) -> Tile? {
-        var index = point.y * columnCount + point.x
+    func tileAtCoordinate(coordinate: Coordinate) -> Tile? {
+        var index = coordinate.y * columnCount + coordinate.x
 
         if tiles.count > index {
             return tiles[index]
@@ -704,58 +694,57 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 var pick = Int(arc4random_uniform(UInt32(tiles.count)))
                 var tile = tiles[pick]
 
-                if tile.value != daBomb {
-                    tile.value = daBomb
+                if tile.bombValue != daBomb {
+                    tile.bombValue = daBomb
                     placed = true
                 }
             } while placed != true
         }
     }
 
-    func tilesAroundPoint(point:Point) -> Array<Tile> {
-        var aroundTiles = Array<Tile>()
+    func tilesAroundCoordinate(coordinate: Coordinate) -> [Tile] {
+        var neighbors = [Tile]()
 
-        for column in point.x - 1...point.x + 1 {
+        for column in coordinate.x - 1...coordinate.x + 1 {
             if column > -1 && column < columnCount  {
-                for row in point.y - 1...point.y + 1 {
-                    if row > -1 && row < rowCount && !(column == point.x && row == point.y) {
-                        aroundTiles += tileAtPoint(Point(x:column, y:row))!
+                for row in coordinate.y - 1...coordinate.y + 1 {
+                    if row > -1 && row < rowCount && !(column == coordinate.x && row == coordinate.y) {
+                        neighbors += tileAtCoordinate(Coordinate(x: column, y: row))!
                     }
                 }
             }
         }
 
-        return aroundTiles
+        return neighbors
     }
 
-    func updateTileAt(point:Point) {
-        var tile = tileAtPoint(point)!
+    func updateTileAt(coordinate: Coordinate) {
+        var tile = tileAtCoordinate(coordinate)!
 
-        if tile.value {
+        if tile.bombValue {
             return
         }
 
         var bombs = 0
 
-        var surroundingTiles = tilesAroundPoint(point)
-        for checkTile in surroundingTiles {
-            if checkTile.value == daBomb {
+        var neighbors = tilesAroundCoordinate(coordinate)
+        for checkTile in neighbors {
+            if checkTile.bombValue == daBomb {
                 bombs++
             }
         }
 
-        tile.value = String("\(bombs)")
+        tile.bombValue = String("\(bombs)")
 
         if bombs == 0 {
-            for checkTile in surroundingTiles {
-                if checkTile.value {
+            for checkTile in neighbors {
+                if checkTile.bombValue {
                     continue
                 }
-                if let outerPoint = pointForTile(checkTile) {
-                    updateTileAt(outerPoint)
+                if let outerCoordinate = coordinateForTile(checkTile) {
+                    updateTileAt(outerCoordinate)
                 }
             }
         }
     }
-
 }
