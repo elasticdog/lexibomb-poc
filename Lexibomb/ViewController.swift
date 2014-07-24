@@ -47,12 +47,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     class Tile: Printable {
         var uid: Int?
-        var display: String = ""
         var bombValue: String?
         var letter: String?
         var description: String {
             get {
-                return String("\(display) \(bombValue) \(uid)")
+                return String("\(letter) \(bombValue) \(uid)")
             }
         }
     }
@@ -175,7 +174,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         var label = cell.viewWithTag(TileLabelTag) as UILabel
-        label.text = tile.display
+        label.text = tile.letter
 
         return cell
     }
@@ -194,7 +193,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 rack!.setEnabled(true, forSegmentAtIndex: move.rackIndex)
 
                 tile.letter = nil
-                tile.display = ""
                 collectionView.reloadData()
                 checkPlay()
             }
@@ -208,7 +206,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         tile.letter = rack!.titleForSegmentAtIndex(selectedSegmentIndex)
-        tile.display = String(tile.letter!)
         rack!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
         rack!.selectedSegmentIndex = UISegmentedControlNoSegment
         rack!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
@@ -276,7 +273,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var adjacent = false
         for tile in adjacentTiles {
-            if tile.display != "" && !tileInCurrentPlay(tile) {
+            if tile.letter && !tileInCurrentPlay(tile) {
                 adjacent = true
                 break
             }
@@ -382,7 +379,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func wordLexigraphical(tiles: [Tile]) -> Bool {
-        let word = join("", tiles.map { $0.display.lowercaseString })
+        let word = join("", tiles.map { $0.letter!.lowercaseString })
         NSLog("word: %@", word)
         let range = NSRange(location: 0, length: tiles.count)
         let nonlex = UITextChecker().rangeOfMisspelledWordInString(word, range: range, startingAt: 0, wrap: false, language: "en_US")
@@ -487,39 +484,40 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func scoreTile(tile: Tile) -> (Int, Int) {
         var score = 0
         var multiplier = 1
-        let display = tile.display
+        let letter = tile.letter!
+        let tilePoints = letterPoints[letter]!
 
         if tilePlayed(tile) {
-            score = letterPoints[display]!
+            score = tilePoints
         } else {
             switch tile.bombValue! {
             case "0":
-                score = letterPoints[display]!
+                score = tilePoints
             case "1":
-                score = letterPoints[display]! * 2
+                score = tilePoints * 2
             case "2":
-                score = letterPoints[display]! * 3
+                score = tilePoints * 3
             case "3":
-                score = letterPoints[display]!
+                score = tilePoints
                 multiplier = 2
             case "4":
-                score = letterPoints[display]!
+                score = tilePoints
                 multiplier = 3
             case "5":
-                score = letterPoints[display]! * 2
+                score = tilePoints * 2
                 multiplier = 2
             case "6":
-                score = letterPoints[display]! * 3
+                score = tilePoints * 3
                 multiplier = 2
             case "7":
-                score = letterPoints[display]! * 3
+                score = tilePoints * 3
             default:
                 score = 0
                 multiplier = 0
             }
         }
 
-        println("Letter Points: \(letterPoints[display]!) Score: \(score) Multiplier: \(multiplier)")
+        println("Letter Points: \(tilePoints) Score: \(score) Multiplier: \(multiplier)")
         return (score, multiplier)
     }
 
