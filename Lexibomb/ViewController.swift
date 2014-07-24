@@ -246,7 +246,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         self.collectionView.reloadData()
     }
 
-    func tileInCurrentWord(tile: Tile) -> Bool {
+    func tileInCurrentPlay(tile: Tile) -> Bool {
         var contained = false
         for move in currentPlay {
             if move.tile === tile {
@@ -276,7 +276,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var adjacent = false
         for tile in adjacentTiles {
-            if tile.display != "" && !tileInCurrentWord(tile) {
+            if tile.display != "" && !tileInCurrentPlay(tile) {
                 adjacent = true
                 break
             }
@@ -285,8 +285,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return adjacent
     }
 
-    func isCurrentWordOriented() -> Bool {
-        var oriented = true
+    func isCurrentPlayAligned() -> Bool {
+        var aligned = true
 
         if currentPlay.count <= 1 {
             currentPlayOrientation = nil
@@ -299,13 +299,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 if let orientation = currentPlayOrientation {
                     if orientation == Orientation.Horizontal {
                         if tileCoordinate.y != startingCoordinate.y {
-                            oriented = false
+                            aligned = false
                             currentPlayOrientation = nil
                             break
                         }
                     } else if orientation == Orientation.Vertical {
                         if tileCoordinate.x != startingCoordinate.x {
-                            oriented = false
+                            aligned = false
                             currentPlayOrientation = nil
                             break
                         }
@@ -316,14 +316,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     } else if tileCoordinate.x == startingCoordinate.x {
                         currentPlayOrientation = Orientation.Vertical
                     } else {
-                        oriented = false
+                        aligned = false
                         break
                     }
                 }
             }
         }
 
-        return oriented
+        return aligned
     }
 
     func contiguousTiles(startingTile: Tile, orientation: Orientation) -> [Tile] {
@@ -461,7 +461,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         if valid {
             // ensure that all of the tiles within currentPlay[] are contained
             // within a single row or a single column
-            valid = isCurrentWordOriented()
+            valid = isCurrentPlayAligned()
         }
 
         if valid {
