@@ -58,7 +58,7 @@
                                 </constraints>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LetterBar" id="Ugo-sU-jtH">
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="RackBar" id="Ugo-sU-jtH">
                             <rect key="frame" x="0.0" y="54" width="600" height="80"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>

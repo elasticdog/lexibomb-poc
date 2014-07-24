@@ -11,7 +11,7 @@ import UIKit
 let daBomb = "💣"
 
 let TileLabelTag = 1001
-let TileScoreTag = 1002
+let TilePointsTag = 1002
 let TileImageTag = 1005
 
 let PlayButtonTag = 1003
@@ -180,16 +180,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         var label = cell.viewWithTag(TileLabelTag) as UILabel
         label.text = tile.letter
-        
-        var scoreLabel = cell.viewWithTag(TileScoreTag) as UILabel
-        
-        var scoreText = ""
+
+        var pointsLabel = cell.viewWithTag(TilePointsTag) as UILabel
+
+        var pointsText = ""
         if let letter = tile.letter {
-            scoreText = String(letterPoints[letter]!)
+            pointsText = String(letterPoints[letter]!)
         }
-        
-        scoreLabel.text = scoreText
-        
+
+        pointsLabel.text = pointsText
+
         return cell
     }
 
@@ -202,7 +202,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         if kind == UICollectionElementKindSectionFooter {
             if !footer {
-                footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "LetterBar", forIndexPath: indexPath) as? UICollectionReusableView
+                footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "RackBar", forIndexPath: indexPath) as? UICollectionReusableView
                 footer!.backgroundColor = UIColor.whiteColor();
                 footer!.layer.cornerRadius = 1
                 rack!.tintColor = letterTileColor;
