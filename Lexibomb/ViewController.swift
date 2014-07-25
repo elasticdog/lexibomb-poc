@@ -15,6 +15,7 @@ let TilePointsTag = 1002
 let TileImageTag = 1005
 
 let PlayButtonTag = 1003
+let PassButtonTag = 1004
 
 let PlayerOneRackTag = 2001
 let PlayerTwoRackTag = 2002
@@ -79,6 +80,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var currentPlay = [Move]()
     var currentPlayOrientation: Orientation?
     var playButton: UIButton!
+    var passButton: UIButton!
     var letterBag = [String]()
     var letterPoints = [String: Int]()
     var columnCount = 15
@@ -100,6 +102,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 playerTwo.scoreLabel = view.viewWithTag(PlayerTwoScoreTag) as? UILabel
 
                 playButton = view.viewWithTag(PlayButtonTag) as? UIButton
+                passButton = view.viewWithTag(PassButtonTag) as? UIButton
 
                 if let control = playerOne.rack {
                     for segment in 0..<control.numberOfSegments {
@@ -114,8 +117,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
 
-                if let button = playButton {
-                    button.addTarget(self, action: "playButtonPressed", forControlEvents: .TouchUpInside)
+                if let play = playButton {
+                    play.addTarget(self, action: "playButtonPressed", forControlEvents: .TouchUpInside)
+                }
+
+                if let pass = playButton {
+                    pass.addTarget(self, action: "passButtonPressed", forControlEvents: .TouchUpInside)
                 }
             }
         }
@@ -686,6 +693,32 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         currentPlayer.rack!.enabled = true
 
         firstPlay = false
+        playButton!.enabled = false
+    }
+
+    func passButtonPressed() {
+        println("pass button pressed")
+        for move in currentPlay {
+            println("move: \(move)")
+            currentPlayer.rack!.setTitle(move.tile.letter, forSegmentAtIndex: move.rackIndex)
+            currentPlayer.rack!.selectedSegmentIndex = move.rackIndex
+            currentPlayer.rack!.setEnabled(true, forSegmentAtIndex: move.rackIndex)
+            move.tile.letter = nil
+        }
+
+        currentPlay.removeAll()
+        collectionView.reloadData()
+
+        currentPlayer.rack!.enabled = false
+
+        if currentPlayer === playerOne {
+            currentPlayer = playerTwo
+        } else {
+            currentPlayer = playerOne
+        }
+
+        currentPlayer.rack!.enabled = true
+
         playButton!.enabled = false
     }
 
