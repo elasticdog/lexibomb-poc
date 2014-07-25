@@ -693,6 +693,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
+        currentPlayer.rack!.selectedSegmentIndex = -1
         currentPlayer.rack!.enabled = false
 
         if currentPlayer === playerOne {
