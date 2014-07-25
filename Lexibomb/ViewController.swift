@@ -764,7 +764,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func tileAtCoordinate(coordinate: Coordinate) -> Tile? {
         var index = coordinate.y * columnCount + coordinate.x
 
-        if tiles.count > index {
+        if index > 0 && tiles.count > index {
             return tiles[index]
         } else {
             return nil
