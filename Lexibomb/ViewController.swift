@@ -86,6 +86,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var columnCount = 15
     var rowCount = 15
     var tiles = [Tile]()
+    var wordList = [String]()
     var firstPlay = true
 
     var playerOne = Player()
@@ -162,6 +163,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         ]
 
         currentPlayer = playerOne
+
+        let bundle = NSBundle.mainBundle()
+        let path = bundle.pathForResource("2of12inf", ofType: "txt")
+        let contents = String.stringWithContentsOfFile(path, encoding: NSUTF8StringEncoding, error: nil)
+        wordList = contents!.componentsSeparatedByString("\n")
+        wordList.removeLast()
 
         super.init(coder: aDecoder)
     }
@@ -431,15 +438,32 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return valid
     }
 
+    func binarySearch<T: Comparable>(array: [T], value: T, lo: Int, hi: Int) -> Int? {
+        let middle = ((lo + hi) / 2)
+
+        if hi < lo {
+            return nil
+        }
+
+        println("lo: \(array[lo]) middle: \(array[middle]) hi: \(array[hi])")
+
+        if array[middle] > value {
+            return binarySearch(array, value: value, lo: lo, hi: middle - 1)
+        } else if array[middle] < value {
+            return binarySearch(array, value: value, lo: middle + 1, hi: hi)
+        } else {
+            return middle
+        }
+    }
+
     func wordLexigraphical(tiles: [Tile]) -> Bool {
         var lexigraphical = true
         let word = join("", tiles.map { $0.letter!.lowercaseString })
+        println("checking spelling for: \(word)")
 
         if !word.rangeOfString("_") {
-            NSLog("word: %@", word)
-            let range = NSRange(location: 0, length: tiles.count)
-            let nonlex = UITextChecker().rangeOfMisspelledWordInString(word, range: range, startingAt: 0, wrap: false, language: "en_US")
-            if nonlex.location != NSNotFound {
+            let found: Int? = binarySearch(wordList, value: word, lo: 0, hi: wordList.count - 1)
+            if found == nil {
                 lexigraphical = false
             }
         }

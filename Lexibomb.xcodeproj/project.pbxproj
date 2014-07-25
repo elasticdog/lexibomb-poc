@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9389AEC419830C190047A328 /* 2of12inf.txt in Resources */ = {isa = PBXBuildFile; fileRef = 9389AEC319830C190047A328 /* 2of12inf.txt */; };
 		E7A324181960AE4500FBAEFC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A324171960AE4500FBAEFC /* AppDelegate.swift */; };
 		E7A3241A1960AE4500FBAEFC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A324191960AE4500FBAEFC /* ViewController.swift */; };
 		E7A3241D1960AE4500FBAEFC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7A3241B1960AE4500FBAEFC /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9389AEC319830C190047A328 /* 2of12inf.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = 2of12inf.txt; sourceTree = "<group>"; };
 		E7A324121960AE4500FBAEFC /* Lexibomb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lexibomb.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7A324161960AE4500FBAEFC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7A324171960AE4500FBAEFC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 		E7A324151960AE4500FBAEFC /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				9389AEC319830C190047A328 /* 2of12inf.txt */,
 				E7A324161960AE4500FBAEFC /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -191,6 +194,7 @@
 			files = (
 				E7A3241D1960AE4500FBAEFC /* Main.storyboard in Resources */,
 				E7A3241F1960AE4500FBAEFC /* Images.xcassets in Resources */,
+				9389AEC419830C190047A328 /* 2of12inf.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
