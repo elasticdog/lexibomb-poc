@@ -90,7 +90,7 @@
                                     </segments>
                                     <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </segmentedControl>
-                                <button opaque="NO" tag="1003" contentMode="scaleToFill" misplaced="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
+                                <button opaque="NO" tag="1003" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2k-Cc-gu6">
                                     <rect key="frame" x="549" y="7" width="37" height="30"/>
                                     <state key="normal" title="Play">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -106,12 +106,12 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="3001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="S1" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pit-oH-lEV" userLabel="P1">
-                                    <rect key="frame" x="20" y="11" width="21" height="20.5"/>
+                                    <rect key="frame" x="20" y="11" width="21" height="21"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" tag="1004" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ST6-A1-MnA">
+                                <button opaque="NO" tag="1004" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ST6-A1-MnA">
                                     <rect key="frame" x="549" y="43" width="37" height="30"/>
                                     <state key="normal" title="Pass">
                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -122,13 +122,16 @@
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="XLl-yN-YA9" secondAttribute="trailing" constant="65" id="36s-2a-O3N"/>
                                 <constraint firstItem="XLl-yN-YA9" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="54" id="3OQ-hW-KIQ"/>
+                                <constraint firstItem="ST6-A1-MnA" firstAttribute="baseline" secondItem="gcd-th-4qW" secondAttribute="baseline" id="3nz-rw-vUd"/>
                                 <constraint firstItem="XLl-yN-YA9" firstAttribute="leading" secondItem="gcd-th-4qW" secondAttribute="trailing" constant="13" id="5sq-Ls-ZWI"/>
                                 <constraint firstAttribute="bottom" secondItem="gcd-th-4qW" secondAttribute="bottom" constant="12" id="9X4-rH-TeR"/>
                                 <constraint firstAttribute="trailing" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="65" id="CCi-gM-DIr"/>
                                 <constraint firstItem="XLl-yN-YA9" firstAttribute="top" secondItem="t4b-f3-ovP" secondAttribute="bottom" constant="8" symbolic="YES" id="EM2-lm-W2d"/>
+                                <constraint firstAttribute="trailing" secondItem="ST6-A1-MnA" secondAttribute="trailing" constant="14" id="HEK-nV-cDf"/>
                                 <constraint firstItem="t4b-f3-ovP" firstAttribute="leading" secondItem="Ugo-sU-jtH" secondAttribute="leading" constant="54" id="Nbz-kv-kG5"/>
-                                <constraint firstAttribute="bottom" secondItem="L2k-Cc-gu6" secondAttribute="bottom" constant="25" id="RPh-df-Af6"/>
+                                <constraint firstAttribute="bottom" secondItem="L2k-Cc-gu6" secondAttribute="bottom" constant="43" id="RPh-df-Af6"/>
                                 <constraint firstItem="L2k-Cc-gu6" firstAttribute="leading" secondItem="t4b-f3-ovP" secondAttribute="trailing" constant="14" id="XKR-Ip-sGP"/>
+                                <constraint firstItem="ST6-A1-MnA" firstAttribute="leading" secondItem="L2k-Cc-gu6" secondAttribute="leading" id="m8u-GB-Ccb"/>
                                 <constraint firstAttribute="trailing" secondItem="L2k-Cc-gu6" secondAttribute="trailing" constant="14" id="pO0-fO-4KE"/>
                                 <constraint firstAttribute="centerY" secondItem="t4b-f3-ovP" secondAttribute="centerY" constant="18" id="qu5-dE-9hb"/>
                                 <constraint firstItem="gcd-th-4qW" firstAttribute="top" secondItem="Pit-oH-lEV" secondAttribute="bottom" constant="15" id="tbi-NT-pj1"/>

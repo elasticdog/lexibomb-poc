@@ -121,7 +121,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     play.addTarget(self, action: "playButtonPressed", forControlEvents: .TouchUpInside)
                 }
 
-                if let pass = playButton {
+                if let pass = passButton {
                     pass.addTarget(self, action: "passButtonPressed", forControlEvents: .TouchUpInside)
                 }
             }
