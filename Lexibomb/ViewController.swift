@@ -389,6 +389,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 } else {
                     begin = previousTile
                 }
+            } else {
+                break
             }
         }
 
@@ -400,6 +402,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 } else {
                     end = nextTile
                 }
+            } else {
+                break
             }
         }
 
