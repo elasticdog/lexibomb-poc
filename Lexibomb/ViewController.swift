@@ -432,12 +432,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func wordLexigraphical(tiles: [Tile]) -> Bool {
+        var lexigraphical = true
         let word = join("", tiles.map { $0.letter!.lowercaseString })
-        NSLog("word: %@", word)
-        let range = NSRange(location: 0, length: tiles.count)
-        let nonlex = UITextChecker().rangeOfMisspelledWordInString(word, range: range, startingAt: 0, wrap: false, language: "en_US")
 
-        return nonlex.location == NSNotFound
+        if !word.bridgeToObjectiveC().containsString("_") {
+            NSLog("word: %@", word)
+            let range = NSRange(location: 0, length: tiles.count)
+            let nonlex = UITextChecker().rangeOfMisspelledWordInString(word, range: range, startingAt: 0, wrap: false, language: "en_US")
+            if nonlex.location != NSNotFound {
+                lexigraphical = false
+            }
+        }
+
+        return lexigraphical
     }
 
     func checkSpelling() -> Bool {
