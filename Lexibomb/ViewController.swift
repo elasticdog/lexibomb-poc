@@ -96,33 +96,31 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         didSet {
             if let view = footer {
                 playerOne.rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
-                playerTwo.rack = view.viewWithTag(PlayerTwoRackTag) as? UISegmentedControl
-
-                playerOne.scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
-                playerTwo.scoreLabel = view.viewWithTag(PlayerTwoScoreTag) as? UILabel
-
-                playButton = view.viewWithTag(PlayButtonTag) as? UIButton
-                passButton = view.viewWithTag(PassButtonTag) as? UIButton
-
                 if let control = playerOne.rack {
                     for segment in 0..<control.numberOfSegments {
                         control.setTitle(takeLetter(), forSegmentAtIndex: segment)
                     }
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
+                playerOne.scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
+
+                playerTwo.rack = view.viewWithTag(PlayerTwoRackTag) as? UISegmentedControl
                 if let control = playerTwo.rack {
                     for segment in 0..<control.numberOfSegments {
                         control.setTitle(takeLetter(), forSegmentAtIndex: segment)
                     }
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
+                playerTwo.scoreLabel = view.viewWithTag(PlayerTwoScoreTag) as? UILabel
 
-                if let play = playButton {
-                    play.addTarget(self, action: "playButtonPressed", forControlEvents: .TouchUpInside)
+                playButton = view.viewWithTag(PlayButtonTag) as? UIButton
+                if let button = playButton {
+                    button.addTarget(self, action: "playButtonPressed", forControlEvents: .TouchUpInside)
                 }
 
-                if let pass = passButton {
-                    pass.addTarget(self, action: "passButtonPressed", forControlEvents: .TouchUpInside)
+                passButton = view.viewWithTag(PassButtonTag) as? UIButton
+                if let button = passButton {
+                    button.addTarget(self, action: "passButtonPressed", forControlEvents: .TouchUpInside)
                 }
             }
         }
@@ -697,11 +695,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func passButtonPressed() {
-        println("pass button pressed")
         for move in currentPlay {
-            println("move: \(move)")
             currentPlayer.rack!.setTitle(move.tile.letter, forSegmentAtIndex: move.rackIndex)
-            currentPlayer.rack!.selectedSegmentIndex = move.rackIndex
             currentPlayer.rack!.setEnabled(true, forSegmentAtIndex: move.rackIndex)
             move.tile.letter = nil
         }
@@ -709,6 +704,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         currentPlay.removeAll()
         collectionView.reloadData()
 
+        currentPlayer.rack!.selectedSegmentIndex = -1
         currentPlayer.rack!.enabled = false
 
         if currentPlayer === playerOne {
