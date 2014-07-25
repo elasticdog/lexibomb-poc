@@ -679,8 +679,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var bar = currentPlayer.rack!
         for segment in 0..<bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
-                bar.setTitle(takeLetter(), forSegmentAtIndex: segment)
-                bar.setEnabled(true, forSegmentAtIndex: segment)
+                if letterBag.count > 0 {
+                    bar.setTitle(takeLetter(), forSegmentAtIndex: segment)
+                    bar.setEnabled(true, forSegmentAtIndex: segment)
+                }
             }
         }
 
