@@ -57,6 +57,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
+    class Player {
+        var rack: UISegmentedControl?
+        var scoreLabel: UILabel!
+        init() {
+            rack = UISegmentedControl()
+            scoreLabel = UILabel()
+        }
+    }
+
     struct Move {
         let tile: Tile
         let rackIndex: Int
@@ -69,9 +78,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var bombCount = 22
     var currentPlay = [Move]()
     var currentPlayOrientation: Orientation?
-    var rack: UISegmentedControl?
     var playButton: UIButton!
-    var scoreLabel: UILabel!
     var letterBag = [String]()
     var letterPoints = [String: Int]()
     var columnCount = 15
@@ -79,14 +86,28 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var tiles = [Tile]()
     var firstPlay = true
 
+    var playerOne = Player()
+    var playerTwo = Player()
+    var currentPlayer: Player
+
     var footer: UICollectionReusableView? {
         didSet {
             if let view = footer {
-                rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
-                playButton = view.viewWithTag(PlayButtonTag) as? UIButton
-                scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
+                playerOne.rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
+                playerTwo.rack = view.viewWithTag(PlayerTwoRackTag) as? UISegmentedControl
 
-                if let control = rack {
+                playerOne.scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
+                playerTwo.scoreLabel = view.viewWithTag(PlayerTwoScoreTag) as? UILabel
+
+                playButton = view.viewWithTag(PlayButtonTag) as? UIButton
+
+                if let control = playerOne.rack {
+                    for segment in 0..<control.numberOfSegments {
+                        control.setTitle(takeLetter(), forSegmentAtIndex: segment)
+                    }
+                    control.selectedSegmentIndex = UISegmentedControlNoSegment
+                }
+                if let control = playerTwo.rack {
                     for segment in 0..<control.numberOfSegments {
                         control.setTitle(takeLetter(), forSegmentAtIndex: segment)
                     }
@@ -134,6 +155,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             "Z": 10,
             "_": 0,
         ]
+
+        currentPlayer = playerOne
 
         super.init(coder: aDecoder)
     }
@@ -205,7 +228,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "RackBar", forIndexPath: indexPath) as? UICollectionReusableView
                 footer!.backgroundColor = UIColor.whiteColor();
                 footer!.layer.cornerRadius = 1
-                rack!.tintColor = letterTileColor;
+                playerOne.rack!.tintColor = letterTileColor;
+                playerTwo.rack!.tintColor = letterTileColor;
             }
             result = self.footer
         }
@@ -220,9 +244,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         if tile.letter {
             if let move = moveForTile(tile) {
-                rack!.setTitle(move.tile.letter, forSegmentAtIndex: move.rackIndex)
-                rack!.selectedSegmentIndex = move.rackIndex
-                rack!.setEnabled(true, forSegmentAtIndex: move.rackIndex)
+                currentPlayer.rack!.setTitle(move.tile.letter, forSegmentAtIndex: move.rackIndex)
+                currentPlayer.rack!.selectedSegmentIndex = move.rackIndex
+                currentPlayer.rack!.setEnabled(true, forSegmentAtIndex: move.rackIndex)
 
                 tile.letter = nil
                 collectionView.reloadData()
@@ -231,16 +255,16 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             return;
         }
 
-        var selectedSegmentIndex = rack!.selectedSegmentIndex
+        var selectedSegmentIndex = currentPlayer.rack!.selectedSegmentIndex
         if selectedSegmentIndex == UISegmentedControlNoSegment {
             println("Tile: \(tile)")
             return
         }
 
-        tile.letter = rack!.titleForSegmentAtIndex(selectedSegmentIndex)
-        rack!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
-        rack!.selectedSegmentIndex = UISegmentedControlNoSegment
-        rack!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
+        tile.letter = currentPlayer.rack!.titleForSegmentAtIndex(selectedSegmentIndex)
+        currentPlayer.rack!.setTitle("", forSegmentAtIndex: selectedSegmentIndex)
+        currentPlayer.rack!.selectedSegmentIndex = UISegmentedControlNoSegment
+        currentPlayer.rack!.setEnabled(false, forSegmentAtIndex: selectedSegmentIndex)
 
         currentPlay.append(Move(tile: tile, rackIndex: selectedSegmentIndex))
 
@@ -634,22 +658,32 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             updateTileAt(coordinateForTile(move.tile)!)
         }
 
-        if let previousScore = scoreLabel.text.toInt() {
-            scoreLabel.text = "\(scorePlay() + previousScore)"
+        if let previousScore = currentPlayer.scoreLabel.text.toInt() {
+            currentPlayer.scoreLabel.text = "\(scorePlay() + previousScore)"
         } else {
-            scoreLabel.text = "\(scorePlay())"
+            currentPlayer.scoreLabel.text = "\(scorePlay())"
         }
 
         currentPlay.removeAll()
         collectionView.reloadData()
 
-        var bar = rack!
+        var bar = currentPlayer.rack!
         for segment in 0..<bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
                 bar.setTitle(takeLetter(), forSegmentAtIndex: segment)
                 bar.setEnabled(true, forSegmentAtIndex: segment)
             }
         }
+
+        currentPlayer.rack!.enabled = false
+
+        if currentPlayer === playerOne {
+            currentPlayer = playerTwo
+        } else {
+            currentPlayer = playerOne
+        }
+
+        currentPlayer.rack!.enabled = true
 
         firstPlay = false
         playButton!.enabled = false

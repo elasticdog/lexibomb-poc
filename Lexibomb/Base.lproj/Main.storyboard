@@ -76,7 +76,7 @@
                                     </segments>
                                     <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                 </segmentedControl>
-                                <segmentedControl opaque="NO" tag="2002" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XLl-yN-YA9" userLabel="Letters">
+                                <segmentedControl opaque="NO" tag="2002" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="fill" contentVerticalAlignment="center" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="XLl-yN-YA9" userLabel="Letters">
                                     <rect key="frame" x="54" y="44" width="481" height="29"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                     <segments>
