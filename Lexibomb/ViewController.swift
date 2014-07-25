@@ -438,22 +438,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return valid
     }
 
-    func binarySearch<T: Comparable>(array: [T], value: T, lo: Int, hi: Int) -> Int? {
-        let middle = ((lo + hi) / 2)
+    func binarySearch<T: Comparable>(array: [T], key: T) -> Int? {
+        var low = 0
+        var high = array.count - 1
 
-        if hi < lo {
-            return nil
+        while low <= high {
+            let mid = low + ((high - low) / 2)
+            let midValue = array[mid]
+
+            println("low: \(array[low]) middle: \(midValue) high: \(array[high])")
+
+            if midValue < key {
+                low = mid + 1
+            } else if midValue > key {
+                high = mid - 1
+            } else {
+                return mid
+            }
         }
-
-        println("lo: \(array[lo]) middle: \(array[middle]) hi: \(array[hi])")
-
-        if array[middle] > value {
-            return binarySearch(array, value: value, lo: lo, hi: middle - 1)
-        } else if array[middle] < value {
-            return binarySearch(array, value: value, lo: middle + 1, hi: hi)
-        } else {
-            return middle
-        }
+        return nil
     }
 
     func wordLexigraphical(tiles: [Tile]) -> Bool {
@@ -462,7 +465,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         println("checking spelling for: \(word)")
 
         if !word.rangeOfString("_") {
-            let found: Int? = binarySearch(wordList, value: word, lo: 0, hi: wordList.count - 1)
+            let found: Int? = binarySearch(wordList, key: word)
             if found == nil {
                 lexigraphical = false
             }
