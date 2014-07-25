@@ -435,7 +435,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var lexigraphical = true
         let word = join("", tiles.map { $0.letter!.lowercaseString })
 
-        if !word.bridgeToObjectiveC().containsString("_") {
+        if !word.rangeOfString("_") {
             NSLog("word: %@", word)
             let range = NSRange(location: 0, length: tiles.count)
             let nonlex = UITextChecker().rangeOfMisspelledWordInString(word, range: range, startingAt: 0, wrap: false, language: "en_US")
