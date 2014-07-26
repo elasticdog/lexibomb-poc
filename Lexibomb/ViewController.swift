@@ -437,26 +437,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return valid
     }
 
-    func wordLexigraphical(tiles: [Tile]) -> Bool {
+    func tileArrayLexigraphical(tiles: [Tile]) -> Bool {
+        return wordLexigraphical(join("", tiles.map { $0.letter!.lowercaseString }))
+    }
+
+    func wordLexigraphical(word: String) -> Bool {
         var lexigraphical = true
-        let word = join("", tiles.map { $0.letter!.lowercaseString })
         println("spell check: \(word)")
 
-        if word.rangeOfString("_") {
-            var valid = false
+        if let blankRange = word.rangeOfString("_") {
+            lexigraphical = false
 
             // ordered by letter frequency for speed
             for character in "etaoinshrdlcumwfgypbvkjxqz" {
-                let possibleWord = Array(word).reduce("") { $0 + ($1 == "_" ? character: $1) }
 
-                if wordList.containsObject(possibleWord) {
-                    valid = true
+                let possibleWord = word.stringByReplacingCharactersInRange(blankRange, withString: String(character))
+                if wordLexigraphical(possibleWord) {
+                    lexigraphical = true
                     break
                 }
-            }
-
-            if !valid {
-                lexigraphical = false
             }
         } else {
             lexigraphical = wordList.containsObject(word)
@@ -467,27 +466,27 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func checkSpelling() -> Bool {
         var valid = true
-        var word = [Tile]()
+        var tiles = [Tile]()
 
         if currentPlay.count == 0 {
             valid = false
         } else if currentPlay.count == 1 {
-            word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Horizontal)
-            if word.count > 1 {
-                valid = wordLexigraphical(word)
+            tiles = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Horizontal)
+            if tiles.count > 1 {
+                valid = tileArrayLexigraphical(tiles)
             }
 
             if valid {
-                word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Vertical)
-                if word.count > 1 {
-                    valid = wordLexigraphical(word)
+                tiles = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Vertical)
+                if tiles.count > 1 {
+                    valid = tileArrayLexigraphical(tiles)
                 }
             }
         } else if currentPlay.count > 1 {
             if let orientation = currentPlayOrientation {
-                word = contiguousTiles(currentPlay[0].tile, orientation: orientation)
-                if word.count > 1 {
-                    valid = wordLexigraphical(word)
+                tiles = contiguousTiles(currentPlay[0].tile, orientation: orientation)
+                if tiles.count > 1 {
+                    valid = tileArrayLexigraphical(tiles)
                 }
 
                 if valid {
@@ -498,9 +497,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
                     var currentPlayTiles = currentPlay.map { $0.tile }
                     for tile in currentPlayTiles {
-                        word = contiguousTiles(tile, orientation: oppositeOrientation)
-                        if word.count > 1 {
-                            valid = wordLexigraphical(word)
+                        tiles = contiguousTiles(tile, orientation: oppositeOrientation)
+                        if tiles.count > 1 {
+                            valid = tileArrayLexigraphical(tiles)
                             if !valid {
                                 break
                             }
