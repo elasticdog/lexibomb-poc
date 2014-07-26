@@ -443,6 +443,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var high = array.count - 1
 
         while low <= high {
+            //let mid = (low + high) >> 1
             let mid = low + ((high - low) / 2)
             let midValue = array[mid]
 
