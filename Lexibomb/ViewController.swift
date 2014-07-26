@@ -313,11 +313,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let coordinate = coordinateForTile(tile)!
 
         var adjacentTiles = [Tile]()
-        if let left = tileAtCoordinate(coordinate + Coordinate(x: -1, y: 0)) {
-            adjacentTiles += left
+        if coordinate.x != 0 {
+            if let left = tileAtCoordinate(coordinate + Coordinate(x: -1, y: 0)) {
+                adjacentTiles += left
+            }
         }
-        if let right = tileAtCoordinate(coordinate + Coordinate(x: 1, y: 0)) {
-            adjacentTiles += right
+        if coordinate.x != columnCount - 1 {
+            if let right = tileAtCoordinate(coordinate + Coordinate(x: 1, y: 0)) {
+                adjacentTiles += right
+            }
         }
         if let above = tileAtCoordinate(coordinate + Coordinate(x: 0, y: -1)) {
             adjacentTiles += above
@@ -450,8 +454,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
             // ordered by letter frequency for speed
             for character in "etaoinshrdlcumwfgypbvkjxqz" {
-
                 let possibleWord = word.stringByReplacingCharactersInRange(blankRange, withString: String(character))
+
                 if wordLexigraphical(possibleWord) {
                     lexigraphical = true
                     break
