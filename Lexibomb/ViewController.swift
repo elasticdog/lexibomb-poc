@@ -86,7 +86,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var columnCount = 15
     var rowCount = 15
     var tiles = [Tile]()
-    var wordList = NSMutableOrderedSet()
+    var wordList: NSOrderedSet
     var firstPlay = true
 
     var playerOne = Player()
@@ -167,7 +167,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let bundle = NSBundle.mainBundle()
         let path = bundle.pathForResource("2of12inf", ofType: "txt")
         let contents = String.stringWithContentsOfFile(path, encoding: NSUTF8StringEncoding, error: nil)
-        wordList.addObjectsFromArray(contents!.componentsSeparatedByString("\n"))
+        wordList = NSOrderedSet(array: contents!.componentsSeparatedByString("\n"))
 
         super.init(coder: aDecoder)
     }
