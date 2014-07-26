@@ -440,9 +440,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func wordLexigraphical(tiles: [Tile]) -> Bool {
         var lexigraphical = true
         let word = join("", tiles.map { $0.letter!.lowercaseString })
-        println("checking spelling for: \(word)")
+        println("spell check: \(word)")
 
-        if !word.rangeOfString("_") {
+        if word.rangeOfString("_") {
+            var valid = false
+
+            // ordered by letter frequency for speed
+            for character in "etaoinshrdlcumwfgypbvkjxqz" {
+                let possibleWord = Array(word).reduce("") { $0 + ($1 == "_" ? character: $1) }
+
+                if wordList.containsObject(possibleWord) {
+                    valid = true
+                    break
+                }
+            }
+
+            if !valid {
+                lexigraphical = false
+            }
+        } else {
             lexigraphical = wordList.containsObject(word)
         }
 
