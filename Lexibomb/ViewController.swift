@@ -446,7 +446,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             let mid = low + ((high - low) / 2)
             let midValue = array[mid]
 
-            println("low: \(array[low]) middle: \(midValue) high: \(array[high])")
+            //println("low: \(array[low]) middle: \(midValue) high: \(array[high])")
 
             if midValue < key {
                 low = mid + 1
