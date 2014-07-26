@@ -86,7 +86,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var columnCount = 15
     var rowCount = 15
     var tiles = [Tile]()
-    var wordList = [String]()
+    var wordList = NSMutableOrderedSet()
     var firstPlay = true
 
     var playerOne = Player()
@@ -167,8 +167,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let bundle = NSBundle.mainBundle()
         let path = bundle.pathForResource("2of12inf", ofType: "txt")
         let contents = String.stringWithContentsOfFile(path, encoding: NSUTF8StringEncoding, error: nil)
-        wordList = contents!.componentsSeparatedByString("\n")
-        wordList.removeLast()
+        wordList.addObjectsFromArray(contents!.componentsSeparatedByString("\n"))
 
         super.init(coder: aDecoder)
     }
@@ -438,38 +437,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return valid
     }
 
-    func binarySearch<T: Comparable>(array: [T], key: T) -> Int? {
-        var low = 0
-        var high = array.count - 1
-
-        while low <= high {
-            //let mid = (low + high) >> 1
-            let mid = low + ((high - low) / 2)
-            let midValue = array[mid]
-
-            //println("low: \(array[low]) middle: \(midValue) high: \(array[high])")
-
-            if midValue < key {
-                low = mid + 1
-            } else if midValue > key {
-                high = mid - 1
-            } else {
-                return mid
-            }
-        }
-        return nil
-    }
-
     func wordLexigraphical(tiles: [Tile]) -> Bool {
         var lexigraphical = true
         let word = join("", tiles.map { $0.letter!.lowercaseString })
         println("checking spelling for: \(word)")
 
         if !word.rangeOfString("_") {
-            let found: Int? = binarySearch(wordList, key: word)
-            if found == nil {
-                lexigraphical = false
-            }
+            lexigraphical = wordList.containsObject(word)
         }
 
         return lexigraphical
