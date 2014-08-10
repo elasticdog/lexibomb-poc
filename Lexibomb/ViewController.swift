@@ -23,11 +23,13 @@ let PlayerTwoRackTag = 2002
 let PlayerOneScoreTag = 3001
 let PlayerTwoScoreTag = 3002
 
-@infix func +(left: ViewController.Coordinate, right: ViewController.Coordinate) -> ViewController.Coordinate {
+infix operator + { associativity left precedence 140 }
+func + (left: ViewController.Coordinate, right: ViewController.Coordinate) -> ViewController.Coordinate {
     return ViewController.Coordinate(x: left.x + right.x, y: left.y + right.y)
 }
 
-@infix func ==(left: ViewController.Coordinate, right: ViewController.Coordinate) -> Bool {
+infix operator == { associativity left precedence 140 }
+func == (left: ViewController.Coordinate, right: ViewController.Coordinate) -> Bool {
     return left.x == right.x && left.y == right.y
 }
 
@@ -42,7 +44,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         let y: Int
         var description: String {
             get {
-                return String("(\(x), \(y))")
+                return String(format: "(\(x), \(y))")
             }
         }
     }
@@ -53,7 +55,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var letter: String?
         var description: String {
             get {
-                return String("\(letter) \(bombValue) \(uid)")
+                return String(format: "\(letter) \(bombValue) \(uid)")
             }
         }
     }
@@ -127,7 +129,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
-    init(coder aDecoder: NSCoder!)  {
+    required init(coder aDecoder: NSCoder!)  {
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
             letterBag.append(String(character))
         }
@@ -204,7 +206,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         if tilePlayed(tile) {
             cell.backgroundColor = letterTileColor
-        } else if tile.letter? {
+        } else if tile.letter != nil {
             cell.backgroundColor = UIColor.grayColor()
         }
 
@@ -235,7 +237,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var result: UICollectionReusableView? = nil
 
         if kind == UICollectionElementKindSectionFooter {
-            if !footer {
+            if footer == nil {
                 footer = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "RackBar", forIndexPath: indexPath) as? UICollectionReusableView
                 footer!.backgroundColor = UIColor.whiteColor();
                 footer!.layer.cornerRadius = 1
@@ -253,7 +255,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
         var tile = tiles[indexPath.row]
 
-        if tile.letter {
+        if tile.letter != nil {
             if let move = moveForTile(tile) {
                 currentPlayer.rack!.setTitle(move.tile.letter, forSegmentAtIndex: move.rackIndex)
                 currentPlayer.rack!.selectedSegmentIndex = move.rackIndex
@@ -315,24 +317,24 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var adjacentTiles = [Tile]()
         if coordinate.x != 0 {
             if let left = tileAtCoordinate(coordinate + Coordinate(x: -1, y: 0)) {
-                adjacentTiles += left
+                adjacentTiles.append(left)
             }
         }
         if coordinate.x != columnCount - 1 {
             if let right = tileAtCoordinate(coordinate + Coordinate(x: 1, y: 0)) {
-                adjacentTiles += right
+                adjacentTiles.append(right)
             }
         }
         if let above = tileAtCoordinate(coordinate + Coordinate(x: 0, y: -1)) {
-            adjacentTiles += above
+            adjacentTiles.append(above)
         }
         if let below = tileAtCoordinate(coordinate + Coordinate(x: 0, y: 1)) {
-            adjacentTiles += below
+            adjacentTiles.append(below)
         }
 
         var adjacent = false
         for tile in adjacentTiles {
-            if tile.letter && !tileInCurrentPlay(tile) {
+            if tile.letter != nil && !tileInCurrentPlay(tile) {
                 adjacent = true
                 break
             }
@@ -392,9 +394,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         var begin = startingTile
-        while begin.letter {
+        while begin.letter != nil {
             if let previousTile = tileAtCoordinate(coordinateForTile(begin)! + decrement) {
-                if !previousTile.letter {
+                if previousTile.letter == nil {
                     break
                 } else {
                     begin = previousTile
@@ -405,9 +407,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         var end = startingTile
-        while end.letter {
+        while end.letter != nil {
             if let nextTile = tileAtCoordinate(coordinateForTile(end)! + increment) {
-                if !nextTile.letter {
+                if nextTile.letter == nil {
                     break
                 } else {
                     end = nextTile
@@ -661,7 +663,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func tilePlayed(tile: Tile) -> Bool {
         var result = false
 
-        if tile.letter {
+        if tile.letter != nil {
             result = true
             for move in currentPlay {
                 if move.tile.uid == tile.uid {
@@ -828,7 +830,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if column > -1 && column < columnCount  {
                 for row in coordinate.y - 1...coordinate.y + 1 {
                     if row > -1 && row < rowCount && !(column == coordinate.x && row == coordinate.y) {
-                        neighbors += tileAtCoordinate(Coordinate(x: column, y: row))!
+                        neighbors.append(tileAtCoordinate(Coordinate(x: column, y: row))!)
                     }
                 }
             }
@@ -840,7 +842,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func updateTileAt(coordinate: Coordinate) {
         var tile = tileAtCoordinate(coordinate)!
 
-        if tile.bombValue {
+        if tile.bombValue != nil {
             return
         }
 
@@ -853,11 +855,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
-        tile.bombValue = String("\(bombs)")
+        tile.bombValue = String(format: "\(bombs)")
 
         if bombs == 0 {
             for checkTile in neighbors {
-                if checkTile.bombValue {
+                if checkTile.bombValue != nil {
                     continue
                 }
                 if let outerCoordinate = coordinateForTile(checkTile) {
