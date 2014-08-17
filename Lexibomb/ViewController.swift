@@ -8,7 +8,7 @@
 
 import UIKit
 
-let daBomb = "💣"
+let daBomb = "BOMB"
 
 let TileLabelTag = 1001
 let TilePointsTag = 1002
@@ -23,7 +23,6 @@ let PlayerTwoRackTag = 2002
 let PlayerOneScoreTag = 3001
 let PlayerTwoScoreTag = 3002
 
-infix operator + { associativity left precedence 140 }
 func + (left: ViewController.Coordinate, right: ViewController.Coordinate) -> ViewController.Coordinate {
     return ViewController.Coordinate(x: left.x + right.x, y: left.y + right.y)
 }
@@ -449,7 +448,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func wordLexigraphical(word: String) -> Bool {
         var lexigraphical = true
-        println("spell check: \(word)")
 
         if let blankRange = word.rangeOfString("_") {
             lexigraphical = false
@@ -465,6 +463,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         } else {
             lexigraphical = wordList.containsObject(word)
+        }
+
+        if lexigraphical {
+            println("valid spell check: \(word)")
+        } else {
+            println("INVALID: spell check: \(word)")
         }
 
         return lexigraphical
@@ -530,9 +534,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     break
                 }
             }
+            if !valid {
+                println("INVALID: no adjacent tiles")
+            }
         } else {
             if currentPlay.count == 1 {
                 valid = false
+                println("INVALID: no single tile words are valid (currentPlay.count == 1)")
             } else {
                 valid = true
             }
@@ -542,6 +550,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             // ensure that all of the tiles within currentPlay[] are contained
             // within a single row or a single column
             valid = isCurrentPlayAligned()
+            if !valid {
+                println("INVALID: unknown axis")
+            }
         }
 
         if valid {
@@ -550,6 +561,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if currentPlay.count > 1 {
                 var wordTiles = contiguousTiles(currentPlay[0].tile, orientation: currentPlayOrientation!)
                 valid = wordContainsAllMoves(wordTiles)
+            }
+            if !valid {
+                println("INVALID: word does not contain all moves from the rack")
             }
         }
 
@@ -692,6 +706,26 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return result
     }
 
+    func cyclePlay() {
+        currentPlay.removeAll()
+        collectionView.reloadData()
+
+        currentPlayer.rack!.selectedSegmentIndex = -1
+        currentPlayer.rack!.enabled = false
+
+        if currentPlayer === playerOne {
+            currentPlayer = playerTwo
+        } else {
+            currentPlayer = playerOne
+        }
+
+        currentPlayOrientation = nil
+
+        currentPlayer.rack!.enabled = true
+
+        playButton!.enabled = false
+    }
+
     func playButtonPressed() {
         for move in currentPlay {
             updateTileAt(coordinateForTile(move.tile)!)
@@ -703,9 +737,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             currentPlayer.scoreLabel.text = "\(scorePlay())"
         }
 
-        currentPlay.removeAll()
-        collectionView.reloadData()
-
         var bar = currentPlayer.rack!
         for segment in 0..<bar.numberOfSegments {
             if bar.titleForSegmentAtIndex(segment) == "" {
@@ -716,19 +747,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         }
 
-        currentPlayer.rack!.selectedSegmentIndex = -1
-        currentPlayer.rack!.enabled = false
-
-        if currentPlayer === playerOne {
-            currentPlayer = playerTwo
-        } else {
-            currentPlayer = playerOne
-        }
-
-        currentPlayer.rack!.enabled = true
-
         firstPlay = false
-        playButton!.enabled = false
+        cyclePlay()
     }
 
     func passButtonPressed() {
@@ -738,21 +758,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             move.tile.letter = nil
         }
 
-        currentPlay.removeAll()
-        collectionView.reloadData()
-
-        currentPlayer.rack!.selectedSegmentIndex = -1
-        currentPlayer.rack!.enabled = false
-
-        if currentPlayer === playerOne {
-            currentPlayer = playerTwo
-        } else {
-            currentPlayer = playerOne
-        }
-
-        currentPlayer.rack!.enabled = true
-
-        playButton!.enabled = false
+        cyclePlay()
     }
 
     func takeLetter() -> String {
