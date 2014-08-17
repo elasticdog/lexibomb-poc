@@ -614,7 +614,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return (score, multiplier)
     }
 
-    func scorePlay() -> Int {
+    func updateScore(score: Int, multiplier: Int) {
+        var total = score * multiplier
+
+        if let previousScore = currentPlayer.scoreLabel.text.toInt() {
+            currentPlayer.scoreLabel.text = "\(total + previousScore)"
+        } else {
+            currentPlayer.scoreLabel.text = "\(total)"
+        }
+
+        println("score: \(score) * \(multiplier) = \(total)")
+    }
+
+    func scorePlay() {
         var score = 0
         var playMultiplier = 1
 
@@ -628,6 +640,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     score += letterScore
                     playMultiplier *= wordMultiplier
                 }
+                updateScore(score, multiplier: playMultiplier)
+                score = 0
+                playMultiplier = 1
             }
 
             word = contiguousTiles(currentPlay[0].tile, orientation: Orientation.Vertical)
@@ -637,6 +652,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                     score += letterScore
                     playMultiplier *= wordMultiplier
                 }
+                updateScore(score, multiplier: playMultiplier)
+                score = 0
+                playMultiplier = 1
             }
         } else if currentPlay.count > 1 {
             if let orientation = currentPlayOrientation {
@@ -647,6 +665,9 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                         score += letterScore
                         playMultiplier *= wordMultiplier
                     }
+                    updateScore(score, multiplier: playMultiplier)
+                    score = 0
+                    playMultiplier = 1
                 }
 
                 var oppositeOrientation = Orientation.Vertical
@@ -663,15 +684,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                             score += letterScore
                             playMultiplier *= wordMultiplier
                         }
+                        updateScore(score, multiplier: playMultiplier)
+                        score = 0
+                        playMultiplier = 1
                     }
                 }
             }
         }
-
-        println("score: \(score) * \(playMultiplier) = \(score * playMultiplier)")
-        score = score * playMultiplier
-
-        return score
     }
 
     func tilePlayed(tile: Tile) -> Bool {
@@ -731,11 +750,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             updateTileAt(coordinateForTile(move.tile)!)
         }
 
-        if let previousScore = currentPlayer.scoreLabel.text.toInt() {
-            currentPlayer.scoreLabel.text = "\(scorePlay() + previousScore)"
-        } else {
-            currentPlayer.scoreLabel.text = "\(scorePlay())"
-        }
+        scorePlay()
 
         var bar = currentPlayer.rack!
         for segment in 0..<bar.numberOfSegments {
