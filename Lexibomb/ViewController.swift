@@ -55,7 +55,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var letter: String?
         var description: String {
             get {
-                return String(format: "\(letter) \(bombValue) \(uid)")
+                return String(format: "\(letter?) \(bombValue?) \(uid?)")
             }
         }
     }
