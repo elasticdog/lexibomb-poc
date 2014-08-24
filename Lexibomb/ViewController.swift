@@ -92,7 +92,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     var playerOne = Player()
     var playerTwo = Player()
-    var currentPlayer: Player
+    var currentPlayer:Player = Player()
 
     var footer: UICollectionReusableView? {
         didSet {
@@ -139,6 +139,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         footer = nil
         placeBombs()
         firstPlay = true
+        currentPlayer = playerOne
     }
 
     required init(coder aDecoder: NSCoder)  {
@@ -172,7 +173,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             "_": 0,
         ]
 
-        currentPlayer = playerOne
 
         let bundle = NSBundle.mainBundle()
         let path = bundle.pathForResource("2of12inf", ofType: "txt")
