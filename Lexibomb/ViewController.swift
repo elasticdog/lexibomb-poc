@@ -136,7 +136,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 freshGameButton = view.viewWithTag(NewGameButtonTag) as? UIButton
                 if let button = freshGameButton {
                     println("freshButton init")
-                    button.addTarget(self, action: "freshGame", forControlEvents: .TouchUpInside)
+                    button.addTarget(self, action: "freshGameButtonPressed", forControlEvents: .TouchUpInside)
                 }
             }
         }
@@ -144,17 +144,21 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func freshGame() {
         println("fresh game")
+        tiles = [Tile]()
         letterBag = [String]()
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
             letterBag.append(String(character))
         }
 
-        playerOne = Player()
-        playerTwo = Player()
-        footer = nil
+        playerOne.scoreLabel.text = "0"
+        playerOne.rack?.enabled = true
+
+        playerTwo.scoreLabel.text = "0"
+        playerTwo.rack?.enabled = false
         placeBombs()
         firstPlay = true
         currentPlayer = playerOne
+        currentPlay.removeAll(keepCapacity: false)
     }
 
     required init(coder aDecoder: NSCoder)  {
@@ -809,6 +813,14 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         cyclePlay()
     }
 
+    func freshGameButtonPressed() {
+        freshGame()
+        collectionView.reloadData()
+        
+        currentPlayer.rack!.enabled = true
+        playButton!.enabled = false
+    }
+    
     func takeLetter() -> String {
         var location = Int(arc4random_uniform(UInt32(letterBag.count)))
 
