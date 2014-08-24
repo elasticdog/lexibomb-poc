@@ -16,6 +16,7 @@ let TileImageTag = 1005
 
 let PlayButtonTag = 1003
 let PassButtonTag = 1004
+let NewGameButtonTag = 1006
 
 let PlayerOneRackTag = 2001
 let PlayerTwoRackTag = 2002
