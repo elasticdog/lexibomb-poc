@@ -128,7 +128,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
-    required init(coder aDecoder: NSCoder!)  {
+    required init(coder aDecoder: NSCoder)  {
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
             letterBag.append(String(character))
         }
@@ -167,7 +167,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         let bundle = NSBundle.mainBundle()
         let path = bundle.pathForResource("2of12inf", ofType: "txt")
-        let contents = String.stringWithContentsOfFile(path, encoding: NSUTF8StringEncoding, error: nil)
+        let contents = String.stringWithContentsOfFile(path!, encoding: NSUTF8StringEncoding, error: nil)
         wordList = NSOrderedSet(array: contents!.componentsSeparatedByString("\n"))
 
         super.init(coder: aDecoder)
@@ -494,7 +494,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             }
         } else if currentPlay.count > 1 {
             if let orientation = currentPlayOrientation {
-                tiles = contiguousTiles(currentPlay[0].tile, orientation: orientation)
+                tiles = contiguousTiles(currentPlay[0].tile,    orientation: orientation)
                 if tiles.count > 1 {
                     valid = tileArrayLexigraphical(tiles)
                 }
