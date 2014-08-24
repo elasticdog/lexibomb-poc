@@ -83,6 +83,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     var currentPlayOrientation: Orientation?
     var playButton: UIButton!
     var passButton: UIButton!
+    var freshGameButton: UIButton!
     var letterBag = [String]()
     var letterPoints = [String: Int]()
     var columnCount = 15
@@ -129,12 +130,25 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
+    var header: UICollectionReusableView? {
+        didSet {
+            freshGameButton = view.viewWithTag(NewGameButtonTag) as? UIButton
+            if let view = header {
+                if let button = freshGameButton {
+                    println("freshButton init")
+                    button.addTarget(self, action: "freshGame", forControlEvents: .TouchUpInside)
+                }
+            }
+        }
+    }
+
     func freshGame() {
+        println("fresh game")
         letterBag = [String]()
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
             letterBag.append(String(character))
         }
-        
+
         playerOne = Player()
         playerTwo = Player()
         footer = nil
@@ -257,6 +271,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             result = self.footer
         }
 
+        if kind == UICollectionElementKindSectionHeader {
+            if header == nil {
+                header = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "ControlBar", forIndexPath: indexPath) as? UICollectionReusableView
+                header!.backgroundColor = UIColor.whiteColor();
+                header!.layer.cornerRadius = 1
+            }
+            result = self.header
+        }
+
         return result
     }
 
@@ -309,7 +332,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     // MARK: - Private
-    
+
     func tileInCurrentPlay(tile: Tile) -> Bool {
         var contained = false
         for move in currentPlay {
