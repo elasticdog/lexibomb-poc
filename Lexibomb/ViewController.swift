@@ -132,8 +132,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     var header: UICollectionReusableView? {
         didSet {
-            freshGameButton = view.viewWithTag(NewGameButtonTag) as? UIButton
             if let view = header {
+                freshGameButton = view.viewWithTag(NewGameButtonTag) as? UIButton
                 if let button = freshGameButton {
                     println("freshButton init")
                     button.addTarget(self, action: "freshGame", forControlEvents: .TouchUpInside)
@@ -268,16 +268,15 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 playerOne.rack!.tintColor = letterTileColor;
                 playerTwo.rack!.tintColor = letterTileColor;
             }
-            result = self.footer
+            result = footer
         }
-
-        if kind == UICollectionElementKindSectionHeader {
+        else if kind == UICollectionElementKindSectionHeader {
             if header == nil {
                 header = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: "ControlBar", forIndexPath: indexPath) as? UICollectionReusableView
                 header!.backgroundColor = UIColor.whiteColor();
                 header!.layer.cornerRadius = 1
             }
-            result = self.header
+            result = header
         }
 
         return result
