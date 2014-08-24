@@ -128,11 +128,20 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
     }
 
-    required init(coder aDecoder: NSCoder)  {
+    func freshGame() {
+        letterBag = [String]()
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
             letterBag.append(String(character))
         }
+        
+        playerOne = Player()
+        playerTwo = Player()
+        footer = nil
+        placeBombs()
+        firstPlay = true
+    }
 
+    required init(coder aDecoder: NSCoder)  {
         letterPoints = [
             "A": 1,
             "B": 3,
@@ -171,11 +180,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         wordList = NSOrderedSet(array: contents!.componentsSeparatedByString("\n"))
 
         super.init(coder: aDecoder)
+
+        freshGame()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        placeBombs()
     }
 
     override func prefersStatusBarHidden() -> Bool {
@@ -298,7 +308,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     // MARK: - Private
-
+    
     func tileInCurrentPlay(tile: Tile) -> Bool {
         var contained = false
         for move in currentPlay {
