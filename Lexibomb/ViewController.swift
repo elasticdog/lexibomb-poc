@@ -63,10 +63,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     class Player {
         var rack: UISegmentedControl?
         var scoreLabel: UILabel!
-        init() {
-            rack = UISegmentedControl()
-            scoreLabel = UILabel()
-        }
     }
 
     struct Move {
@@ -101,21 +97,21 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if let view = footer {
                 playerOne.rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
                 if let control = playerOne.rack {
-                    for segment in 0..<control.numberOfSegments {
-                        control.setTitle(takeLetter(), forSegmentAtIndex: segment)
-                    }
+                    emptyRack(control)
+                    fillRack(control)
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
                 playerOne.scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
+                playerOne.scoreLabel.text = "0"
 
                 playerTwo.rack = view.viewWithTag(PlayerTwoRackTag) as? UISegmentedControl
                 if let control = playerTwo.rack {
-                    for segment in 0..<control.numberOfSegments {
-                        control.setTitle(takeLetter(), forSegmentAtIndex: segment)
-                    }
+                    emptyRack(control)
+                    fillRack(control)
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
                 playerTwo.scoreLabel = view.viewWithTag(PlayerTwoScoreTag) as? UILabel
+                playerTwo.scoreLabel.text = "0"
 
                 playButton = view.viewWithTag(PlayButtonTag) as? UIButton
                 if let button = playButton {
@@ -150,11 +146,19 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             letterBag.append(String(character))
         }
 
-        playerOne.scoreLabel.text = "0"
-        playerOne.rack?.enabled = true
+        if let rack = playerOne.rack {
+            emptyRack(playerOne.rack!)
+            emptyRack(playerTwo.rack!)
+            fillRack(playerOne.rack!)
+            fillRack(playerTwo.rack!)
 
-        playerTwo.scoreLabel.text = "0"
-        playerTwo.rack?.enabled = false
+            playerOne.scoreLabel.text = "0"
+            playerOne.rack?.enabled = true
+
+            playerTwo.scoreLabel.text = "0"
+            playerTwo.rack?.enabled = false
+        }
+
         placeBombs()
         firstPlay = true
         currentPlayer = playerOne
@@ -762,6 +766,23 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return result
     }
 
+    func emptyRack(rack: UISegmentedControl) {
+        for segment in 0..<rack.numberOfSegments {
+            rack.setTitle("", forSegmentAtIndex: segment)
+        }
+    }
+
+    func fillRack(rack: UISegmentedControl) {
+        for segment in 0..<rack.numberOfSegments {
+            if rack.titleForSegmentAtIndex(segment) == "" {
+                if letterBag.count > 0 {
+                    rack.setTitle(takeLetter(), forSegmentAtIndex: segment)
+                    rack.setEnabled(true, forSegmentAtIndex: segment)
+                }
+            }
+        }
+    }
+
     func cyclePlay() {
         currentPlay.removeAll()
         collectionView.reloadData()
@@ -789,15 +810,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         scorePlay()
 
-        var bar = currentPlayer.rack!
-        for segment in 0..<bar.numberOfSegments {
-            if bar.titleForSegmentAtIndex(segment) == "" {
-                if letterBag.count > 0 {
-                    bar.setTitle(takeLetter(), forSegmentAtIndex: segment)
-                    bar.setEnabled(true, forSegmentAtIndex: segment)
-                }
-            }
-        }
+        fillRack(currentPlayer.rack!)
 
         firstPlay = false
         cyclePlay()
@@ -816,11 +829,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func freshGameButtonPressed() {
         freshGame()
         collectionView.reloadData()
-        
+
         currentPlayer.rack!.enabled = true
         playButton!.enabled = false
     }
-    
+
     func takeLetter() -> String {
         var location = Int(arc4random_uniform(UInt32(letterBag.count)))
 
