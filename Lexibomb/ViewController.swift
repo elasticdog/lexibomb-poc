@@ -131,7 +131,6 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if let view = header {
                 freshGameButton = view.viewWithTag(NewGameButtonTag) as? UIButton
                 if let button = freshGameButton {
-                    println("freshButton init")
                     button.addTarget(self, action: "freshGameButtonPressed", forControlEvents: .TouchUpInside)
                 }
             }
@@ -139,14 +138,13 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     }
 
     func freshGame() {
-        println("fresh game")
         tiles = [Tile]()
         letterBag = [String]()
         for character in "AAAAAAAAABBCCDDDDDEEEEEEEEEEEEEFFGGGHHHHIIIIIIIIJKLLLLMMNNNNNOOOOOOOOPPQRRRRRRSSSSSTTTTTTTUUUUVVWWXYYZ__" {
             letterBag.append(String(character))
         }
 
-        if let rack = playerOne.rack {
+        if footer != nil {
             emptyRack(playerOne.rack!)
             emptyRack(playerTwo.rack!)
             fillRack(playerOne.rack!)
