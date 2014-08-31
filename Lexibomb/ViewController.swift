@@ -97,8 +97,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             if let view = footer {
                 playerOne.rack = view.viewWithTag(PlayerOneRackTag) as? UISegmentedControl
                 if let control = playerOne.rack {
-                    emptyRack(control)
-                    fillRack(control)
+                    resetRack(control)
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
                 playerOne.scoreLabel = view.viewWithTag(PlayerOneScoreTag) as? UILabel
@@ -106,8 +105,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
                 playerTwo.rack = view.viewWithTag(PlayerTwoRackTag) as? UISegmentedControl
                 if let control = playerTwo.rack {
-                    emptyRack(control)
-                    fillRack(control)
+                    resetRack(control)
                     control.selectedSegmentIndex = UISegmentedControlNoSegment
                 }
                 playerTwo.scoreLabel = view.viewWithTag(PlayerTwoScoreTag) as? UILabel
@@ -145,10 +143,8 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         }
 
         if footer != nil {
-            emptyRack(playerOne.rack!)
-            emptyRack(playerTwo.rack!)
-            fillRack(playerOne.rack!)
-            fillRack(playerTwo.rack!)
+            resetRack(playerOne.rack!)
+            resetRack(playerTwo.rack!)
 
             playerOne.scoreLabel.text = "0"
             playerOne.rack?.enabled = true
@@ -779,6 +775,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 }
             }
         }
+    }
+
+    func resetRack(rack: UISegmentedControl) {
+        emptyRack(rack)
+        fillRack(rack)
     }
 
     func cyclePlay() {
