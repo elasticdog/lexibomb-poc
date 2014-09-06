@@ -772,6 +772,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         for segment in 0..<rack.numberOfSegments {
             rack.setTitle("", forSegmentAtIndex: segment)
         }
+        rack.selectedSegmentIndex = -1
     }
 
     func fillRack(rack: UISegmentedControl) {
