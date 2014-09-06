@@ -433,7 +433,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 if previousTile.letter == nil {
                     break
                 } else {
-                    begin = previousTile
+                    if ((orientation == Orientation.Horizontal) && (coordinateForTile(previousTile)!.x % columnCount == (columnCount - 1))) {
+                        break
+                    } else {
+                        begin = previousTile
+                    }
                 }
             } else {
                 break
@@ -446,7 +450,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 if nextTile.letter == nil {
                     break
                 } else {
-                    end = nextTile
+                    if ((orientation == Orientation.Horizontal) && (coordinateForTile(nextTile)!.x % columnCount == 0)) {
+                        break
+                    } else {
+                        end = nextTile
+                    }
                 }
             } else {
                 break
