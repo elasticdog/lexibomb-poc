@@ -211,7 +211,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     // MARK: - NSCollectionViewDataSource
 
-    override func collectionView(collectionView: UICollectionView!, cellForItemAtIndexPath indexPath: NSIndexPath!) -> UICollectionViewCell! {
+    override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
         cell.layer.cornerRadius = 8
         cell.backgroundColor = defaultColor
@@ -255,11 +255,11 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         return cell
     }
 
-    override func collectionView(collectionView: UICollectionView!, numberOfItemsInSection section: Int) -> Int {
+    override func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.tiles.count
     }
 
-    override func collectionView(collectionView: UICollectionView!, viewForSupplementaryElementOfKind kind: String!, atIndexPath indexPath: NSIndexPath!) -> UICollectionReusableView! {
+    override func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         var result: UICollectionReusableView? = nil
 
         if kind == UICollectionElementKindSectionFooter {
@@ -281,12 +281,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             result = header
         }
 
-        return result
+        return result!
     }
 
     // MARK: - NSCollectionViewDelegate
 
-    override func collectionView(collectionView: UICollectionView!, didSelectItemAtIndexPath indexPath: NSIndexPath!) {
+    override func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         var tile = tiles[indexPath.row]
 
         if tile.letter != nil {
@@ -315,7 +315,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         currentPlay.append(Move(tile: tile, rackIndex: selectedSegmentIndex))
 
-        self.collectionView.reloadData()
+        self.collectionView!.reloadData()
         checkPlay()
     }
 
@@ -329,7 +329,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 updateTileAt(coordinate)
             }
         }
-        self.collectionView.reloadData()
+        self.collectionView!.reloadData()
     }
 
     // MARK: - Private
@@ -660,7 +660,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     func updateScore(score: Int, multiplier: Int) {
         var total = score * multiplier
 
-        if let previousScore = currentPlayer.scoreLabel.text.toInt() {
+        if let previousScore = currentPlayer.scoreLabel.text!.toInt() {
             currentPlayer.scoreLabel.text = "\(total + previousScore)"
         } else {
             currentPlayer.scoreLabel.text = "\(total)"
@@ -793,7 +793,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func cyclePlay() {
         currentPlay.removeAll()
-        collectionView.reloadData()
+        collectionView!.reloadData()
 
         currentPlayer.rack!.selectedSegmentIndex = -1
         currentPlayer.rack!.enabled = false
@@ -836,7 +836,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func freshGameButtonPressed() {
         freshGame()
-        collectionView.reloadData()
+        collectionView!.reloadData()
 
         currentPlayer.rack!.enabled = true
         playButton!.enabled = false
