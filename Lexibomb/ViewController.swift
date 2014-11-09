@@ -193,7 +193,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         let bundle = NSBundle.mainBundle()
         let path = bundle.pathForResource("2of12inf", ofType: "txt")
-        let contents = String.stringWithContentsOfFile(path!, encoding: NSUTF8StringEncoding, error: nil)
+        let contents = NSString(contentsOfFile: path!, encoding: NSUTF8StringEncoding, error: nil)
         wordList = NSOrderedSet(array: contents!.componentsSeparatedByString("\n"))
 
         super.init(coder: aDecoder)
@@ -315,7 +315,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
         currentPlay.append(Move(tile: tile, rackIndex: selectedSegmentIndex))
 
-        self.collectionView!.reloadData()
+        self.collectionView.reloadData()
         checkPlay()
     }
 
@@ -329,7 +329,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
                 updateTileAt(coordinate)
             }
         }
-        self.collectionView!.reloadData()
+        self.collectionView.reloadData()
     }
 
     // MARK: - Private
@@ -793,7 +793,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func cyclePlay() {
         currentPlay.removeAll()
-        collectionView!.reloadData()
+        collectionView.reloadData()
 
         currentPlayer.rack!.selectedSegmentIndex = -1
         currentPlayer.rack!.enabled = false
@@ -836,7 +836,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
 
     func freshGameButtonPressed() {
         freshGame()
-        collectionView!.reloadData()
+        collectionView.reloadData()
 
         currentPlayer.rack!.enabled = true
         playButton!.enabled = false
