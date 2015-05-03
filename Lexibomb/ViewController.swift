@@ -55,7 +55,7 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
         var letter: String?
         var description: String {
             get {
-                return String(format: "\(letter?) \(bombValue?) \(uid?)")
+                return String(format: "\(letter) \(bombValue) \(uid)")
             }
         }
     }
@@ -212,17 +212,17 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
     // MARK: - NSCollectionViewDataSource
 
     override func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as UICollectionViewCell
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! UICollectionViewCell
         cell.layer.cornerRadius = 8
         cell.backgroundColor = defaultColor
 
         var tile = self.tiles[indexPath.row]
-        var background = cell.viewWithTag(TileImageTag) as UIImageView
+        var background = cell.viewWithTag(TileImageTag) as! UIImageView
         background.image = nil
         background.alpha = 0.7
         background.transform = CGAffineTransformMakeScale(1.2, 1.2)
 
-        if let bombValue = tile.bombValue?.toInt()? {
+        if let bombValue = tile.bombValue?.toInt() {
             cell.backgroundColor = UIColor.whiteColor()
 
             if bombValue > 0 {
@@ -240,10 +240,10 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             cell.backgroundColor = UIColor.redColor()
         }
 
-        var label = cell.viewWithTag(TileLabelTag) as UILabel
+        var label = cell.viewWithTag(TileLabelTag) as! UILabel
         label.text = tile.letter
 
-        var pointsLabel = cell.viewWithTag(TilePointsTag) as UILabel
+        var pointsLabel = cell.viewWithTag(TilePointsTag)as! UILabel
 
         var pointsText = ""
         if let letter = tile.letter {
