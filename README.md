@@ -45,29 +45,197 @@ Scoring
 
 ### Letter Points
 
-| A - M ||||||||||||||
-|:------------------------------------------------------------:|
-| _Letter_ | A | B | C | D | E | F | G | H | I | J | K | L | M |
-| _Points_ | 1 | 3 | 3 | 2 | 1 | 4 | 2 | 4 | 1 | 8 | 5 | 1 | 3 |
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+</colgroup>
 
-| N - Z ||||||||||||||
-|:--------------------------------------------------------------:|
-| _Letter_ | N | O | P | Q  | R | S | T | U | V | W | X | Y | Z  |
-| _Points_ | 1 | 1 | 3 | 10 | 1 | 1 | 1 | 1 | 4 | 4 | 8 | 4 | 10 |
+<thead>
+<tr>
+    <th style="text-align:center;" colspan="14">A - M</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+    <td style="text-align:center;"><em>Letter</em></td>
+    <td style="text-align:left;">A</td>
+    <td style="text-align:left;">B</td>
+    <td style="text-align:left;">C</td>
+    <td style="text-align:left;">D</td>
+    <td style="text-align:left;">E</td>
+    <td style="text-align:left;">F</td>
+    <td style="text-align:left;">G</td>
+    <td style="text-align:left;">H</td>
+    <td style="text-align:left;">I</td>
+    <td style="text-align:left;">J</td>
+    <td style="text-align:left;">K</td>
+    <td style="text-align:left;">L</td>
+    <td style="text-align:left;">M</td>
+</tr>
+<tr>
+    <td style="text-align:center;"><em>Points</em></td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">3</td>
+    <td style="text-align:left;">3</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">8</td>
+    <td style="text-align:left;">5</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">3</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+    <th style="text-align:center;" colspan="14">N - Z</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+    <td style="text-align:center;"><em>Letter</em></td>
+    <td style="text-align:left;">N</td>
+    <td style="text-align:left;">O</td>
+    <td style="text-align:left;">P</td>
+    <td style="text-align:left;">Q</td>
+    <td style="text-align:left;">R</td>
+    <td style="text-align:left;">S</td>
+    <td style="text-align:left;">T</td>
+    <td style="text-align:left;">U</td>
+    <td style="text-align:left;">V</td>
+    <td style="text-align:left;">W</td>
+    <td style="text-align:left;">X</td>
+    <td style="text-align:left;">Y</td>
+    <td style="text-align:left;">Z</td>
+</tr>
+<tr>
+    <td style="text-align:center;"><em>Points</em></td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">3</td>
+    <td style="text-align:left;">10</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">8</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">10</td>
+</tr>
+</tbody>
+</table>
 
 **Blanks [ _ ]** = 0 Points
 
 ### Tileset
 
-| A - M ||||||||||||||
-|:------------------------------------------------------------:|
-| _Tile_  | A | B | C | D | E  | F | G | H | I | J | K | L | M |
-| _Count_ | 9 | 2 | 2 | 4 | 12 | 2 | 3 | 2 | 9 | 1 | 1 | 4 | 2 |
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+</colgroup>
 
-| N - Z ||||||||||||||
-|:-----------------------------------------------------------:|
-| _Tile_  | N | O | P | Q | R | S | T | U | V | W | X | Y | Z |
-| _Count_ | 6 | 8 | 2 | 1 | 6 | 4 | 6 | 4 | 2 | 2 | 1 | 2 | 1 |
+<thead>
+<tr>
+    <th style="text-align:center;" colspan="14">A - M</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+    <td style="text-align:center;"><em>Tile</em></td>
+    <td style="text-align:left;">A</td>
+    <td style="text-align:left;">B</td>
+    <td style="text-align:left;">C</td>
+    <td style="text-align:left;">D</td>
+    <td style="text-align:left;">E</td>
+    <td style="text-align:left;">F</td>
+    <td style="text-align:left;">G</td>
+    <td style="text-align:left;">H</td>
+    <td style="text-align:left;">I</td>
+    <td style="text-align:left;">J</td>
+    <td style="text-align:left;">K</td>
+    <td style="text-align:left;">L</td>
+    <td style="text-align:left;">M</td>
+</tr>
+<tr>
+    <td style="text-align:center;"><em>Count</em></td>
+    <td style="text-align:left;">9</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">12</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">3</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">9</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">2</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<colgroup>
+<col style="text-align:center;"/>
+</colgroup>
+
+<thead>
+<tr>
+    <th style="text-align:center;" colspan="14">N - Z</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+    <td style="text-align:center;"><em>Tile</em></td>
+    <td style="text-align:left;">N</td>
+    <td style="text-align:left;">O</td>
+    <td style="text-align:left;">P</td>
+    <td style="text-align:left;">Q</td>
+    <td style="text-align:left;">R</td>
+    <td style="text-align:left;">S</td>
+    <td style="text-align:left;">T</td>
+    <td style="text-align:left;">U</td>
+    <td style="text-align:left;">V</td>
+    <td style="text-align:left;">W</td>
+    <td style="text-align:left;">X</td>
+    <td style="text-align:left;">Y</td>
+    <td style="text-align:left;">Z</td>
+</tr>
+<tr>
+    <td style="text-align:center;"><em>Count</em></td>
+    <td style="text-align:left;">6</td>
+    <td style="text-align:left;">8</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">6</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">6</td>
+    <td style="text-align:left;">4</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">1</td>
+    <td style="text-align:left;">2</td>
+    <td style="text-align:left;">1</td>
+</tr>
+</tbody>
+</table>
 
 **Blanks [ _ ]** = 2 Tiles
 
