@@ -11,7 +11,7 @@ earns no points.
 - Play tiles anywhere and it will open up the board information like clicks in
   Minesweeper.
 
-<iframe src="https://player.vimeo.com/video/126956439" width="600" height="376" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe> <p><a href="https://vimeo.com/126956439">Lexibomb Game Demo</a> from <a href="https://vimeo.com/elasticdog">Aaron Bull Schaefer</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+[![Lexibomb Demo Video Screenshot](images/vimeo-embed-preview.png)](https://vimeo.com/elasticdog/lexibomb-demo)
 
 ### Gameplay Notes
 
