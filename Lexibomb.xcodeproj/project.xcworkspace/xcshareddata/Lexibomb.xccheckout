@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2C63D1E7-6B2B-4605-889B-8610D3498DFA</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Lexibomb</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>5531E69BB0BEB7CE81265ED2D265D0A80FDF1B89</key>
+		<string>ssh://bitbucket.org/elasticdog/lexibomb.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Lexibomb.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>5531E69BB0BEB7CE81265ED2D265D0A80FDF1B89</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://bitbucket.org/elasticdog/lexibomb.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>5531E69BB0BEB7CE81265ED2D265D0A80FDF1B89</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5531E69BB0BEB7CE81265ED2D265D0A80FDF1B89</string>
+			<key>IDESourceControlWCCName</key>
+			<string>lexibomb</string>
+		</dict>
+	</array>
+</dict>
+</plist>
