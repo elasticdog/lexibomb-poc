@@ -281,15 +281,30 @@ What's Missing
 These are the game mechanics that currently have not been implemented:
 
 - A mechanism to exchange tiles.
-- Enforcment of passing/exchange rules...if a player scores zero points for
+- Enforcement of passing/exchange rules...if a player scores zero points for
   three consecutive turns, the game should end.
 - Bonus points for using all seven tiles in a single play (A.K.A. a bingo).
 - End of game scoring...when a player runs out of tiles, the remaining tile
   values for the other player should be subtracted from their score.
 
+Credits
+-------
+
+I had been sitting on the idea of Lexibomb for a really long time, and I never
+would have moved forward with an attempt at implementing the mechanics of the
+game without the help of [voidref](https://github.com/voidref). Thank you.
+
+#### Disclaimer
+
+> _The code in this repository is 100% a minimal proof of concept; it was
+> thrown together quickly, not really "architected" in any fashion, written in
+> a new language, for a platform that I have very little familiarity with.
+> But...it works._
+
 Legal
 -----
 
-Scrabble is a registered trademark of Hasbro Inc./Milton Bradley, and Mattel/JW Spear & Sons plc.
+Scrabble is a registered trademark of Hasbro Inc./Milton Bradley, and Mattel/JW
+Spear & Sons plc.
 
 Minesweeper is a registered trademark of Microsoft.
