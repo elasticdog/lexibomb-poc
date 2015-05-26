@@ -896,17 +896,12 @@ class ViewController: UICollectionViewController, UICollectionViewDelegate, UICo
             tiles.append( tile )
         }
 
-        for bomb in 0..<bombCount {
-            var placed = false
-            do {
-                var pick = Int(arc4random_uniform(UInt32(tiles.count)))
-                var tile = tiles[pick]
-
-                if tile.bombValue != daBomb {
-                    tile.bombValue = daBomb
-                    placed = true
-                }
-            } while placed != true
+        var locations = Array( 0 ..< tiles.count )
+        
+        for bomb in 0 ..< bombCount {
+            let location = Int(arc4random_uniform(UInt32(locations.count)))
+            tiles[location].bombValue = daBomb
+            locations.removeAtIndex(location)
         }
     }
 
