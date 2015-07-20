@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import GameCenter
 
 let daBomb = "BOMB"
 
@@ -33,7 +34,7 @@ func == (left: ViewController.Coordinate, right: ViewController.Coordinate) -> B
     return left.x == right.x && left.y == right.y
 }
 
-class ViewController: UICollectionViewController {
+class ViewController: UICollectionViewController, GKMatchmakerViewControllerDelegate {
     enum Orientation {
         case Horizontal
         case Vertical
@@ -202,8 +203,19 @@ class ViewController: UICollectionViewController {
         wordList = NSOrderedSet(array: contents!.componentsSeparatedByString("\n"))
 
         super.init(coder: aDecoder)
-
         freshGame()
+        
+        GKLocalPlayer().authenticateHandler = { (vc:UIViewController?, error:NSError?) -> Void in 
+            if let vcActual = vc {
+                self.presentViewController(vcActual, animated: true, completion: nil)
+            }
+            else if GKLocalPlayer().authenticated {
+                self.findMatch()
+            }
+            else {
+                // local single device play ... boooring
+            }
+        }
     }
 
     override func viewDidLoad() {
@@ -842,6 +854,7 @@ class ViewController: UICollectionViewController {
         freshGame()
         collectionView?.reloadData()
 
+        findMatch()
         currentPlayer.rack!.enabled = true
         playButton!.enabled = false
     }
@@ -952,5 +965,52 @@ class ViewController: UICollectionViewController {
                 }
             }
         }
+    }
+    
+    // MARK: - Game Kit shizwa
+    
+    func findMatch() {
+        let request = GKMatchRequest()
+        request.maxPlayers = 2
+        request.minPlayers = 2
+        
+        let gkvc = GKMatchmakerViewController(matchRequest: request)
+        
+        guard let matchvc = gkvc else {
+            return
+        }
+        
+        matchvc.matchmakerDelegate = self
+        
+        self.presentViewController(matchvc, animated: true) { () -> Void in
+            //
+        }
+    }
+    
+    // MARK: GKMatchmakerViewControllerDelegate
+    // The user has cancelled matchmaking
+    func matchmakerViewControllerWasCancelled(viewController: GKMatchmakerViewController) {
+        self.dismissViewControllerAnimated(true) { () -> Void in
+            //
+        }
+    }
+    
+    func matchmakerViewController(viewController: GKMatchmakerViewController, didFailWithError error: NSError) {
+        print("Failed with error: \(error)")
+    }
+    
+    // A peer-to-peer match has been found, the game should start
+    func matchmakerViewController(viewController: GKMatchmakerViewController, didFindMatch match: GKMatch) {
+        print("Fount match: \(match)")
+    }
+    
+    // Players have been found for a server-hosted game, the game should start
+    func matchmakerViewController(viewController: GKMatchmakerViewController, didFindHostedPlayers players: [GKPlayer]) {
+        
+    }
+    
+    // An invited player has accepted a hosted invite.  Apps should connect through the hosting server and then update the player's connected state (using setConnected:forHostedPlayer:)
+    func matchmakerViewController(viewController: GKMatchmakerViewController, hostedPlayerDidAccept player: GKPlayer) {
+        
     }
 }
